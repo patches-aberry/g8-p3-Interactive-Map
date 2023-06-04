@@ -1,5 +1,7 @@
-var states = document.getElementById("states-multi-select")
+var states = document.getElementById("states")
 
-states.addEventListener("click", function(){
-    var options = states.querySelectorAll("option")
-})
+console.log(states)
+
+states.addEventListener("change", function(){
+    alert(this.value)
+},false)
