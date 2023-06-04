@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[105]:
+# In[1]:
 
 
 # Import dependencies
@@ -14,7 +14,7 @@ from sqlalchemy import create_engine, func
 from flask import Flask, jsonify
 
 
-# In[106]:
+# In[2]:
 
 
 # Database setup
@@ -34,16 +34,17 @@ Race = Base.classes.race_breakdown
 Poverty = Base.classes.poverty_rate_by_state_2023
 GDP = Base.classes.sagdp1__all_areas_1997_2022
 Vaccination = Base.classes.us_state_vaccinations
+Voting = Base.classes.cleaned_voting
 
 
-# In[107]:
+# In[3]:
 
 
 # Flask setup
 app = Flask(__name__)
 
 
-# In[108]:
+# In[4]:
 
 
 # Flask routes
@@ -63,37 +64,49 @@ def welcome():
     )
 
 
-# # Route for popular vote data
-# @app.route("/api/v1.0/voting_popular")
-# def pop_vote():
-#     # Create our session (link) from Python to the DB
-#     session = Session(engine)
+# Route for popular vote data
+@app.route("/api/v1.0/voting_popular")
+def pop_vote():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
 
-#     # Query all data
-#     results = session.query(Race.State).all()
-#     session.close()
+    # Query all data
+    results = session.query(Voting.State, Voting.Winning_Party, Voting.Candidate_1_Votes, Voting.Candidate_2_Votes, Voting.Total_Votes).all()
+    session.close()
+    
+    # Loop through data to create list of dictionaries and JSONify
+    popular_stats = []
+    
+    for State, Winner, Can1Votes, Can2Votes, TotalVotes in results:
+        state_popular_dict = {}
+        state_popular_dict['State'] = State
+        state_popular_dict['Popular Winner'] = Winner
+        if Can1Votes > Can2Votes:
+            state_popular_dict['Percentage'] = Can1Votes/TotalVotes
+        else:
+            state_popular_dict['Percentage'] = Can2Votes/TotalVotes
+        popular_stats.append(state_popular_dict)
+    return jsonify(popular_stats)
 
-#     # Convert data into dictionary
-#     ## ADD CODE
 
-#     return jsonify(all_names)
+# Route for electoral vote data
+@app.route("/api/v1.0/voting_electoral")
+def electoral_data():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
 
-
-# # Route for electoral vote data
-# @app.route("/api/v1.0/voting_electoral")
-# def electoral_data():
-#     # Create our session (link) from Python to the DB
-#     session = Session(engine)
-
-#     # Query all data
-#     results = session.query(Passenger.name).all()
-
-#     session.close()
-
-#     # Convert data into dictionary
-#     ## ADD CODE
-
-#     return jsonify(all_names)
+    # Query all data
+    results = session.query(Voting.State, Voting.Winning_Party).all()
+    session.close()
+    
+    # Loop through data to create list of dictionaries and JSONify
+    electoral_stats = []
+    for State, Winner in results:
+        state_electoral_dict = {}
+        state_electoral_dict['State'] = State
+        state_electoral_dict['Electoral Winner'] = Winner
+        electoral_stats.append(state_electoral_dict)
+    return jsonify(electoral_stats)
 
 
 # Route for poverty data
@@ -176,6 +189,7 @@ def whiteness():
         state_whiteness_dict['Percentage White'] = White_alone/Total
         whiteness_stats.append(state_whiteness_dict)
     return jsonify(whiteness_stats)
+
 
 # Route for vaccination data
 @app.route("/api/v1.0/vaccination")
