@@ -12,6 +12,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify
+from flask_cors import CORS, cross_origin
 
 
 # In[2]:
@@ -42,6 +43,7 @@ Voting = Base.classes.cleaned_voting
 
 # Flask setup
 app = Flask(__name__)
+CORS(app)
 
 
 # In[4]:
