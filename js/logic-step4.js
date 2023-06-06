@@ -1,7 +1,7 @@
 // Creating the map object
 var myMap = L.map("map", {
-  center: [37.0902, -95.7129],
-  zoom: 4
+  center: [27.96044, -82.30695],
+  zoom: 7
 });
 
 // Adding the tile layer
@@ -10,9 +10,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 }).addTo(myMap);
 
 // Load the GeoJSON data.
-
-// import {myStatesData} from 'js/us-states.js';
-var geoData = 'js/statesdata.json';
+var geoData = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/15-Mapping-Web/ACS-ED_2014-2018_Economic_Characteristics_FL.geojson";
 
 var geojson;
 
@@ -23,7 +21,7 @@ d3.json(geoData).then(function(data) {
   geojson = L.choropleth(data, {
 
     // Define which property in the features to use.
-    valueProperty: "density",
+    valueProperty: "DP03_16E",
 
     // Set the color scale.
     scale: ["#ffffb2", "#b10026"],
@@ -42,8 +40,8 @@ d3.json(geoData).then(function(data) {
 
     // Binding a popup to each layer
     onEachFeature: function(feature, layer) {
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Estimated employed population with children age 6-17: " +
-        feature.properties.density + "<br /><br />Estimated Total Income and Benefits for Families: $" + feature.properties.density.toString());
+      layer.bindPopup("<strong>" + feature.properties.NAME + "</strong><br /><br />Estimated employed population with children age 6-17: " +
+        feature.properties.DP03_16E + "<br /><br />Estimated Total Income and Benefits for Families: $" + feature.properties.DP03_75E);
     }
   }).addTo(myMap);
 
