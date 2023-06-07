@@ -36,6 +36,7 @@ Poverty = Base.classes.poverty_rate_by_state_2023
 GDP = Base.classes.sagdp1__all_areas_1997_2022
 Vaccination = Base.classes.us_state_vaccinations
 Voting = Base.classes.cleaned_voting
+States = Base.classes.statesdata
 
 
 # In[3]:
@@ -56,6 +57,7 @@ def welcome():
 # List all available api routes.
     return (
         f"Available Routes:<br/>"
+        f"/api/v1.0/states_data<br/>"
         f"/api/v1.0/voting_popular<br/>"
         f"/api/v1.0/voting_electoral<br/>"
         f"/api/v1.0/poverty<br/>"
@@ -64,6 +66,29 @@ def welcome():
         f"/api/v1.0/whiteness<br/>"
         f"/api/v1.0/vaccination<br/>"
     )
+
+
+# # Route for states data
+# @app.route("/api/v1.0/states_data")
+# def states():
+#     # Create our session (link) from Python to the DB
+#     session = Session(engine)
+
+#     # Query all data
+#     results = session.query(States.properties.name, States.properties.density, States.geometry.type, States.geometry.coordinates).all()
+#     session.close()
+    
+#     # Loop through data to create list of dictionaries and JSONify
+#     states_data = []
+    
+#     for Name, Density, Type, Coordinates in results:
+#         state_data_dict = {}
+#         state_data_dict['State'] = State
+#         state_data_dict['Density'] = Density
+#         state_data_dict['Type'] = Type
+#         state_data_dict['Coordinates'] = Coordinates
+#         states_data.append(state_data_dict)
+#     return jsonify(states_data)
 
 
 # Route for popular vote data
@@ -82,7 +107,7 @@ def pop_vote():
     for State, Winner, Can1Votes, Can2Votes, TotalVotes in results:
         state_popular_dict = {}
         state_popular_dict['State'] = State
-        state_popular_dict['Popular Winner'] = Winner
+        state_popular_dict['PopularWinner'] = Winner
         if Can1Votes > Can2Votes:
             state_popular_dict['Percentage'] = Can1Votes/TotalVotes
         else:
@@ -106,7 +131,7 @@ def electoral_data():
     for State, Winner in results:
         state_electoral_dict = {}
         state_electoral_dict['State'] = State
-        state_electoral_dict['Electoral Winner'] = Winner
+        state_electoral_dict['ElectoralWinner'] = Winner
         electoral_stats.append(state_electoral_dict)
     return jsonify(electoral_stats)
 
@@ -126,7 +151,7 @@ def poverty():
     for State, Rate in results:
         state_poverty_dict = {}
         state_poverty_dict['State'] = State
-        state_poverty_dict['Poverty Rate'] = Rate
+        state_poverty_dict['PovertyRate'] = Rate
         poverty_stats.append(state_poverty_dict)
     return jsonify(poverty_stats)
 
@@ -166,7 +191,7 @@ def population():
     for State, Total in results:
         state_pop_dict = {}
         state_pop_dict['State'] = State
-        state_pop_dict['Total Population'] = Total
+        state_pop_dict['TotalPopulation'] = Total
         population_stats.append(state_pop_dict)
     return jsonify(population_stats)
 
@@ -186,9 +211,9 @@ def whiteness():
     for State, Total, White_alone in results:
         state_whiteness_dict = {}
         state_whiteness_dict['State'] = State
-        state_whiteness_dict['Total Population'] = Total
+        state_whiteness_dict['TotalPopulation'] = Total
         state_whiteness_dict['White'] = White_alone
-        state_whiteness_dict['Percentage White'] = White_alone/Total
+        state_whiteness_dict['PercentageWhite'] = White_alone/Total
         whiteness_stats.append(state_whiteness_dict)
     return jsonify(whiteness_stats)
 
@@ -210,7 +235,7 @@ def vaccination():
     for x in range(len(results)):
         state_vaccination_dict = {}
         state_vaccination_dict['State'] = results[x][0]
-        state_vaccination_dict['Vaccination Rate'] = results[x][1]
+        state_vaccination_dict['VaccinationRate'] = results[x][1]
         vaccination_stats.append(state_vaccination_dict)
     return jsonify(vaccination_stats)
 
