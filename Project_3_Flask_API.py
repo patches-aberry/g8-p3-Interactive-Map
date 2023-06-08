@@ -36,7 +36,7 @@ Poverty = Base.classes.poverty_rate_by_state_2023
 GDP = Base.classes.sagdp1__all_areas_1997_2022
 Vaccination = Base.classes.us_state_vaccinations
 Voting = Base.classes.cleaned_voting
-States = Base.classes.statesdata
+# States = Base.classes.statesdata
 
 
 # In[3]:

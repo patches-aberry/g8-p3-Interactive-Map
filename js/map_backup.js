@@ -12,7 +12,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 // Load the GeoJSON data.
 
 // import {myStatesData} from 'js/us-states.js';
-// var geoData = 'js/statesdata.json';
+var geoData = 'js/statesdata.json';
 
 var geojson;
 
