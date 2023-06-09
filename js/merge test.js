@@ -87,29 +87,25 @@ async function getStateData() {
   // var dataVax = await responseVax.json()
   // var dataVote = await responseVote.json()
 
-console.log(dataPop);
-console.log(dataGDP);
+// console.log(dataPop);
+// console.log(dataGDP);
 
 let combinedData = geoData.map((item, i) => Object.assign({}, item, dataGDP[i]));
 let combinedData2 = combinedData.map((item, i) => Object.assign({}, item, dataPop[i]));
 
-// [
-//   ...dataGDP,
-//   ...dataPop
-// ]
+var mapData = {"type":"FeatureCollection","features":  combinedData2  };
+console.log(mapData);
 
-// Object.assign(dataGDP, dataPop);
+// console.log(combinedData2);
 
-console.log(combinedData2);
-
-// d3.json(combinedData).then(function(data) {
+d3.json(mapData).then(function(data) {
   
 
 
   //   // Create a new choropleth layer.
     // geojson = 
-    // L.choropleth(combinedData2, {
-      L.geoJson(combinedData).addTo(map);
+    // L.choropleth(mapData, {
+      L.geoJson(mapData).addTo(map);
       
 // Binding a popup to each layer
 // onEachFeature: function(feature, layer) {

@@ -36,7 +36,6 @@ Poverty = Base.classes.poverty_rate_by_state_2023
 GDP = Base.classes.sagdp1__all_areas_1997_2022
 Vaccination = Base.classes.us_state_vaccinations
 Voting = Base.classes.cleaned_voting
-# States = Base.classes.statesdata
 
 
 # In[3]:
@@ -57,7 +56,6 @@ def welcome():
 # List all available api routes.
     return (
         f"Available Routes:<br/>"
-        f"/api/v1.0/states_data<br/>"
         f"/api/v1.0/voting_popular<br/>"
         f"/api/v1.0/voting_electoral<br/>"
         f"/api/v1.0/poverty<br/>"
@@ -66,29 +64,6 @@ def welcome():
         f"/api/v1.0/whiteness<br/>"
         f"/api/v1.0/vaccination<br/>"
     )
-
-
-# # Route for states data
-# @app.route("/api/v1.0/states_data")
-# def states():
-#     # Create our session (link) from Python to the DB
-#     session = Session(engine)
-
-#     # Query all data
-#     results = session.query(States.properties.name, States.properties.density, States.geometry.type, States.geometry.coordinates).all()
-#     session.close()
-    
-#     # Loop through data to create list of dictionaries and JSONify
-#     states_data = []
-    
-#     for Name, Density, Type, Coordinates in results:
-#         state_data_dict = {}
-#         state_data_dict['State'] = State
-#         state_data_dict['Density'] = Density
-#         state_data_dict['Type'] = Type
-#         state_data_dict['Coordinates'] = Coordinates
-#         states_data.append(state_data_dict)
-#     return jsonify(states_data)
 
 
 # Route for popular vote data
