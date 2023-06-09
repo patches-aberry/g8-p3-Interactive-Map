@@ -1,49 +1,28 @@
-// var states = document.getElementById("states");
-
-// console.log(states);
-
-// states.addEventListener("change", function(){
-//     alert(this.value)
-// },false);
-
-// function getSelection(sel) {
-//     var opts = [],
-//       opt;
-//     var len = sel.options.length;
-//     for (var i = 0; i < len; i++) {
-//       opt = sel.options[i];
-  
-//       if (opt.selected) {
-//         opts.push(opt);
-//         alert(opt.value);
-//       }
-//     }
-  
-//     return opts;
-//   }
-
-// var e1 = document.getElementById("states1");
-// var value1 = e1.value;
-// var text1 = e1.options[e1.selectedIndex].text;
-
-// var e2 = document.getElementById("states2");
-// var value2 = e2.value;
-// var text2 = e2.options[e2.selectedIndex].text;
-
-// console.log(value1)
-
 var state1;
 var state2;
 
+
+var s1Pop;
+var s2Pop;
+var s1GDP;
+var s2GDP;
+var s1White; 
+var s2White; 
+var s1Vax;
+var s2Vax;
+var s1Vote; 
+var s2Vote;
+
+
 function selectState1() {
     state1 = document.getElementById("statesList1").value;
-    console.log(state1)
+    //console.log(state1)
     //call API
 }
 
 function selectState2() {
     state2 = document.getElementById("statesList2").value;
-    console.log(state2)
+    //console.log(state2)
     //call API
 }
 
@@ -51,68 +30,65 @@ function selectState2() {
 
 
 
-function outputTable() {
+async function outputTable() {
+    await getStateData();
     var tableRes = document.querySelector('.compare-table');
     tableRes.innerHTML = generateResultTable();
-    getStateData();
+    //console.log('OutputTable')
 }
 
 function generateResultTable() {
     
     var result = "<b>Summary Table</b><br>"
-    var tr1 = "<tr><th>" + "Population" +       "</th><th>" + "s1v1" + "</th><th>" + "s2v1" + "</th><th>" + "usv1" + "</th></tr>"
-    var tr2 = "<tr><th>" + "GDP" +              "</th><th>" + "s1v2" + "</th><th>" + "s2v2" + "</th><th>" + "usv2" + "</th></tr>"
-    var tr3 = "<tr><th>" + "Whiteness" +        "</th><th>" + "s1v3" + "</th><th>" + "s2v3" + "</th><th>" + "usv3" + "</th></tr>"
-    var tr4 = "<tr><th>" + "Vaccination Rate" + "</th><th>" + "s1v4" + "</th><th>" + "s2v4" + "</th><th>" + "usv4" + "</th></tr>"
-    var tr5 = "<tr><th>" + "Voting Trend" +     "</th><th>" + "s1v5" + "</th><th>" + "s2v5" + "</th><th>" + "usv5" + "</th></tr>"
-    result += "<table><thead><tr><th></th><th>" + state1 + "</th><th>" + state2 + "</th><th>United States</th></tr></thead><tbody>" + tr1 + tr2 + tr3 + tr4 + tr5 + "</tbody></table>"
+    var tr1 = "<tr><th>" + "Population" +       "</th><th>" + "s1v1" + "</th><th>" + "s2v1" + "</th><th>" + "330900000" + "</th></tr>"
+    var tr2 = "<tr><th>" + "GDP" +              "</th><th>" + s1GDP[0].GDP + "</th><th>" + s2GDP[0].GDP + "</th><th>" + "70248.63" + "</th></tr>"
+    var tr3 = "<tr><th>" + "Whiteness" +        "</th><th>" + "s1v3" + "</th><th>" + "s2v3" + "</th><th>" + "75.8" + "</th></tr>"
+    var tr4 = "<tr><th>" + "Vaccination Rate" + "</th><th>" + "s1v4" + "</th><th>" + "s2v4" + "</th><th>" + "70.0" + "</th></tr>"
+    var tr5 = "<tr><th>" + "Voting Trend" +     "</th><th>" + "s1v5" + "</th><th>" + "s2v5" + "</th><th>" + "51.31% Democratic" + "</th></tr>"
+    result += "<table><thead><tr><th>Data Values</th><th>" + state1 + "</th><th>" + state2 + "</th><th>United States</th></tr></thead><tbody>" + tr1 + tr2 + tr3 + tr4 + tr5 + "</tbody></table>"
     
     return result;
 }
 
-
-
 async function getStateData() {
-    var api_url = "http://127.0.0.1:5000/";
+    var api_url = "http://127.0.0.1:5000";
     // Making an API call (request)
     // and getting the response back
-    var responsePop = await fetch(api_url + "api/v1.0/population");
-    var responseGDP = await fetch(api_url + "api/v1.0/gdp");
-    var responseWhite = await fetch(api_url + "api/v1.0/whiteness");
-    var responseVax = await fetch(api_url + "api/v1.0/vaccination");
-    var responseVote = await fetch(api_url + "api/v1.0/voting_popular");
+    var responsePop = await fetch(api_url + "/api/v1.0/population");
+    var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
+    var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
+    var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
+    var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
 
     // Parsing it to JSON format
-    var dataPop = await responsePop.json();
-    var dataGDP = await responseGDP.json();
-    var dataWhite = await responseWhite.json();
-    var dataVax = await responseVax.json();
-    var dataVote = await responseVote.json();
+    var dataPop = await responsePop.json()
+    var dataGDP = await responseGDP.json()
+    var dataWhite = await responseWhite.json()
+    var dataVax = await responseVax.json()
+    var dataVote = await responseVote.json()
     //console.log(data.results);
 
     // Retrieving data from JSON
-    let s1Pop = stateFilter(state1, dataPop)
-    let s2Pop = stateFilter(state2, dataPop)
-    let s1GDP = stateFilter(state1, dataGDP)
-    let s2GDP = stateFilter(state2, dataGPD)
-    let s1White = stateFilter(state1, dataWhite)
-    let s2White = stateFilter(state2, dataWhite)
-    let s1Vax = stateFilter(state1, dataVax)
-    let s2Vax = stateFilter(state2, dataVax)
-    let s1Vote = stateFilter(state1, dataVote)
-    let s2Vote = stateFilter(state2, dataVote)
+    s1Pop = stateFilter(state1, dataPop)
+    s2Pop = stateFilter(state2, dataPop)
+    s1GDP = stateFilter(state1, dataGDP)
+    s2GDP = stateFilter(state2, dataGDP)
+    s1White = stateFilter(state1, dataWhite)
+    s2White = stateFilter(state2, dataWhite)
+    s1Vax = stateFilter(state1, dataVax)
+    s2Vax = stateFilter(state2, dataVax)
+    s1Vote = stateFilter(state1, dataVote)
+    s2Vote = stateFilter(state2, dataVote)
+
+    //let s1GDP = dataGDP.State.filter(x => x.State == state1)
    //filter function
+   console.log(s1GDP[0].GDP);
+   //console.log('getStateData')
 }
 
-function stateFilter(state_in, data_in) {
-    JSON.parse(data_in).filter(function (entry) 
-    {
-    return entry.State === state_in;
-    })
-};
-
-
-
-//build object from API response in JSON
-//have var of object
-//use object to set innerhtml/innervalue based on ID of HTML element in the table. 
+function stateFilter (state_in, data_in) { 
+    console.log(state_in)
+    console.log(data_in)
+    let outvar = data_in.filter(x => x.State == state_in);
+    return outvar;
+}
