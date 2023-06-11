@@ -1,12 +1,29 @@
 /* css/style.css */
 
 body {
-  padding: 0;
-  margin: 0;
-  font-family: Arial, sans-serif;
+    padding: 0;
+    margin: 0;
+  }
+  
+  body,
+  html {
+    height: 100%;
+  }
+  
+  #map {
+    position: relative;
+    width: 100%;
+    height: 500px;
 }
 
-#map,
+  .leaflet-popup-content {
+    text-align: center;
+  }
+  
+  tr,td,th {
+    padding: 10px;
+  }
+
 body,
 html {
   height: 100%;
