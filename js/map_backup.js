@@ -171,7 +171,7 @@ function getColor(d) {
   // let d2 = d.map((i) => Array.assign([], i/Math.max(d)));
   
   let d2 = d/max;
-   console.log(d2);
+   //console.log(d2);
   
   return d2 > 0.95 ? '#800026' :
          d2 > 0.75  ? '#BD0026' :

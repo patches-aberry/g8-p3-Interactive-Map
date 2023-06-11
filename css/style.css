@@ -3,13 +3,23 @@ body {
     margin: 0;
   }
   
-  #map,
   body,
   html {
     height: 100%;
   }
   
+  #map {
+    position: relative;
+    width: 100%;
+    height: 500px;
+}
+
   .leaflet-popup-content {
     text-align: center;
   }
+  
+  tr,td,th {
+    padding: 10px;
+  }
+
   
