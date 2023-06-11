@@ -84,30 +84,81 @@ async function getStateData() {
   // and getting the response back
   var responsePop = await fetch(api_url + "/api/v1.0/population");
   var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
-  // var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
-  // var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
-  // var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
+  var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
+  var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
+  var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
 
   // Parsing it to JSON format
   var dataPop = await responsePop.json();
   var dataGDP = await responseGDP.json()
-  // var dataWhite = await responseWhite.json()
-  // var dataVax = await responseVax.json()
-  // var dataVote = await responseVote.json()
+  var dataWhite = await responseWhite.json()
+  var dataVax = await responseVax.json()
+  var dataVote = await responseVote.json()
 
-// console.log(dataPop);
-// console.log(dataGDP);
+//Combining data sets by matching on state values. 
 
-let combinedData = geoData.map((item, i) => Object.assign({}, item, dataGDP[i]));
-let combinedData2 = combinedData.map((item, i) => Object.assign({}, item, dataPop[i]));
-mapData = {"type":"FeatureCollection","features":  combinedData2  };
+
+let combinedData = geoData.slice(0);
+
+//GDP Data
+for (var i = 0 ; i < combinedData.length ; i++){
+  for (var j = 0; j < dataGDP.length ; j++){
+    if (combinedData[i].properties.name == dataGDP[j].State){
+      combinedData[i].properties.GDP = dataGDP[j].GDP;
+    }
+  };  
+};
+
+//Population Data
+for (var i = 0 ; i < combinedData.length ; i++){
+  for (var j = 0; j < dataPop.length ; j++){
+    if (combinedData[i].properties.name == dataPop[j].State){
+      combinedData[i].properties.TotalPopulation = dataPop[j].TotalPopulation;
+    }
+  };  
+};
+
+//Whiteness data
+for (var i = 0 ; i < combinedData.length ; i++){
+  for (var j = 0; j < dataWhite.length ; j++){
+    if (combinedData[i].properties.name == dataWhite[j].State){
+      combinedData[i].properties.PercentageWhite = dataWhite[j].PercentageWhite;
+    }
+  };  
+};
+
+//Vaccination rate data
+for (var i = 0 ; i < combinedData.length ; i++){
+  for (var j = 0; j < dataVax.length ; j++){
+    if (combinedData[i].properties.name == dataVax[j].State){
+      combinedData[i].properties.VaccinationRate = dataVax[j].VaccinationRate;
+    }
+  };  
+};
+
+//Voting trends data
+for (var i = 0 ; i < combinedData.length ; i++){
+  for (var j = 0; j < dataVote.length ; j++){
+    if (combinedData[i].properties.name == dataVote[j].State){
+      combinedData[i].properties.VotePercent = dataVote[j].Percentage;
+      combinedData[i].properties.WinningParty = dataVote[j].PopularWinner;
+    }
+  };  
+};
+
+//console.log(combinedData)
+
+
+mapData = {"type":"FeatureCollection","features":  combinedData  };
+
+
 // mapData = combinedData2
 // }
-console.log(mapData)
-console.log(dataGDP)
+// console.log(mapData)
+// console.log(dataGDP)
 var max = 0;
 for (let i = 0; i < dataGDP.length; i++) { 
-  if (dataGDP[i].GDP > max) {
+  if ((dataGDP[i].GDP > max) && (dataGDP[i].State!='United States')) {
    max = dataGDP[i].GDP}
    else {}
 }
@@ -120,7 +171,7 @@ function getColor(d) {
   // let d2 = d.map((i) => Array.assign([], i/Math.max(d)));
   
   let d2 = d/max;
-  console.log(d2);
+   console.log(d2);
   
   return d2 > 0.95 ? '#800026' :
          d2 > 0.75  ? '#BD0026' :
