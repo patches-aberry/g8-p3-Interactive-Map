@@ -4,6 +4,56 @@
     <meta charset="UTF-8">
     <script src="js/tables-logic.js"></script>
     <title>Comparison Tables</title>
+    <style>
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+    
+      #map,
+      body,
+      html {
+        height: 100%;
+      }
+    
+      .leaflet-popup-content {
+        text-align: center;
+      }
+    
+      /* Custom styles for the comparison table */
+      .compare-table {
+        margin-top: 20px;
+        border-collapse: collapse;
+        width: 100%;
+        background-color: #fff; /* Set the background color to white */
+      }
+    
+      .compare-table th,
+      .compare-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
+    
+      .compare-table th {
+        background-color: #f2f2f2;
+      }
+    
+      .compare-table tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+    
+      .compare-table tr:hover {
+        background-color: #f2f2f2;
+      }
+    
+      .compare-table th:first-child,
+      .compare-table td:first-child {
+        width: 200px;
+      }
+    </style>    
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
     <label for="states-list1">
@@ -120,10 +170,10 @@
     <option value="Wyoming">Wyoming</option>
   </select>
 
-<br>
+  <br>
   <button id="gen-table-button" type="button" onclick="outputTable()">Generate Table</button>
-<br>
-<br>
-  <div class = "compare-table"></div>
+  <br>
+  <br>
+  <div class="compare-table"></div>
 </body>
 </html>

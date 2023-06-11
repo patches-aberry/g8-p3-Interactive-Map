@@ -1,15 +1,48 @@
-body {
+<style>
+  body {
     padding: 0;
     margin: 0;
+    font-family: Arial, sans-serif;
   }
-  
+
   #map,
   body,
   html {
     height: 100%;
   }
-  
+
   .leaflet-popup-content {
     text-align: center;
   }
-  
+
+  /* Custom styles for the comparison table */
+  .compare-table {
+    margin-top: 20px;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+
+  .compare-table th {
+    background-color: #f2f2f2;
+  }
+
+  .compare-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+
+  .compare-table tr:hover {
+    background-color: #f2f2f2;
+  }
+
+  .compare-table th:first-child,
+  .compare-table td:first-child {
+    width: 200px;
+  }
+</style>
