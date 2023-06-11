@@ -1,48 +1,47 @@
-<style>
-  body {
-    padding: 0;
-    margin: 0;
-    font-family: Arial, sans-serif;
-  }
+/* css/style.css */
 
-  #map,
-  body,
-  html {
-    height: 100%;
-  }
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
-  .leaflet-popup-content {
-    text-align: center;
-  }
+#map,
+body,
+html {
+  height: 100%;
+}
 
-  /* Custom styles for the comparison table */
-  .compare-table {
-    margin-top: 20px;
-    border-collapse: collapse;
-    width: 100%;
-  }
+.leaflet-popup-content {
+  text-align: center;
+}
 
-  .compare-table th,
-  .compare-table td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: left;
-  }
+.compare-table {
+  margin-top: 20px;
+  border-collapse: collapse;
+  width: 100%;
+}
 
-  .compare-table th {
-    background-color: #f2f2f2;
-  }
+.compare-table th,
+.compare-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
 
-  .compare-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
+.compare-table th {
+  background-color: #f2f2f2;
+}
 
-  .compare-table tr:hover {
-    background-color: #f2f2f2;
-  }
+.compare-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
 
-  .compare-table th:first-child,
-  .compare-table td:first-child {
-    width: 200px;
-  }
-</style>
+.compare-table tr:hover {
+  background-color: #f2f2f2;
+}
+
+.compare-table th:first-child,
+.compare-table td:first-child {
+  width: 200px;
+}
