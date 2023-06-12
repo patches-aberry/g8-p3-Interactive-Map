@@ -21,10 +21,10 @@ Tools used to create this project include a Python Flask API, HTML/CSS, SQLite, 
 The authors considered a wide variety of data to include in this tool. While there is a future opportunity to add additional data, the datasets that are included in the first iteration of this tool are: GDP, population density, total population, voting trends (2020 presidential election), percentage of population identifying as white, and vaccination rates. 
 
 Data was ethically sourced from the following locations:
-GDP, Total Population, and Whiteness: [2020 US Decennial Census](https://www.census.gov/data/developers/data-sets/decennial-census.html)
-Density: [US States Data from Leaflet.js](https://leafletjs.com/examples/choropleth/us-states.js)
-Voting Trends: 2020 presidential election results from [MIT Election Data and Science Lab "U.S. President 1976–2020" from Harvard Dataverse] (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX)
-Vaccination Rate: [State-by-state data on COVID-19 vaccinations in the United States from Our World in Data](https://ourworldindata.org/us-states-vaccinations)
+* GDP, Total Population, and Whiteness: [2020 US Decennial Census](https://www.census.gov/data/developers/data-sets/decennial-census.html)
+* Density: [US States Data from Leaflet.js](https://leafletjs.com/examples/choropleth/us-states.js)
+* Voting Trends: 2020 presidential election results from [MIT Election Data and Science Lab "U.S. President 1976–2020" from Harvard Dataverse] (https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX)
+* Vaccination Rate: [State-by-state data on COVID-19 vaccinations in the United States from Our World in Data](https://ourworldindata.org/us-states-vaccinations)
 
 ### How it works
 Users can use the mapping tool by selecting a dataset from the dropdown menu and generating the choropleth map. Color gradients show the relative data between states, and clicking on individual states will display a popup that includes the specific numbers for that state. Two maps can be displayed side by side for quick comparisons between various metrics.
