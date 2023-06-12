@@ -1,7 +1,7 @@
 // Creating the map object
-var myMap = L.map("map", {
+var myMap = L.map("map1", {
   center: [37.0902, -95.7129],
-  zoom: 4
+  zoom: 3
 });
 
 // Adding the tile layer
@@ -9,8 +9,19 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap);
 
+// Creating the map object
+var myMap2 = L.map("map2", {
+  center: [37.0902, -95.7129],
+  zoom: 3
+});
 
-var mapData;
+// Adding the tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(myMap2);
+
+// getGDPData();
+// getDensityData2();
 
 var geoData =
   // {"type":"FeatureCollection","features":
@@ -80,12 +91,11 @@ var geojson = {
 }
 
 function clearMap() {
+  //console.log("clear map function requested")
   location.reload()
-}
+};
 
-function optionChanged() {
-  let SelectID = document.getElementById("mapselect1").value;
-  console.log(SelectID)
+function funcSelectMap1(SelectID) {
   if (SelectID === "GDP") {
     getGDPData();
   }
@@ -106,7 +116,35 @@ function optionChanged() {
   }
 }
 
-async function getGDPData() {
+function funcSelectMap2(SelectID2) {
+  if (SelectID2 === "GDP") {
+    getGDPData2();
+  }
+  else if (SelectID2 === "Density") {
+    getDensityData2();
+  }
+  else if (SelectID2 === "TotalPop") {
+    getTotalPopData2();
+  }
+  else if (SelectID2 === "Voting") {
+    getVotingData2();
+  }
+  else if (SelectID2 === "Whiteness") {
+    getWhiteData2();
+  }
+  else if (SelectID2 === "Vaccination") {
+    getVaxData2();
+  }
+}
+
+function optionChanged() {
+  //clearMap();
+  funcSelectMap1(document.getElementById("mapselect1").value);
+  funcSelectMap2(document.getElementById("mapselect2").value);
+  //console.log()
+}
+
+async function getData() {
   var api_url = "http://127.0.0.1:5000";
   // Making an API call (request)
   // and getting the response back
@@ -129,7 +167,7 @@ async function getGDPData() {
   //GDP Data
   for (var i = 0; i < combinedData.length; i++) {
     for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State.replace("_"," ")) {
+      if (combinedData[i].properties.name == dataGDP[j].State.replace("_", " ")) {
         combinedData[i].properties.GDP = dataGDP[j].GDP;
       }
     };
@@ -173,8 +211,14 @@ async function getGDPData() {
   };
 
   // Format data to match expected incoming data
-  mapData = { "type": "FeatureCollection", "features": combinedData };
+  let mapData = { "type": "FeatureCollection", "features": combinedData };
+  return mapData;
+}
 
+getData();
+
+
+async function getGDPData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 3000000 ? '#800026' :
@@ -204,7 +248,7 @@ async function getGDPData() {
       });
   }
   //add pop ups to map with color and styling from above. 
-  L.geoJson(mapData,
+  L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
   ).addTo(myMap);
 
@@ -239,74 +283,6 @@ async function getGDPData() {
 };
 
 async function getDensityData() {
-  var api_url = "http://127.0.0.1:5000";
-  // Making an API call (request)
-  // and getting the response back
-  var responsePop = await fetch(api_url + "/api/v1.0/population");
-  var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
-  var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
-  var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
-  var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
-
-  // Parsing it to JSON format
-  var dataPop = await responsePop.json();
-  var dataGDP = await responseGDP.json()
-  var dataWhite = await responseWhite.json()
-  var dataVax = await responseVax.json()
-  var dataVote = await responseVote.json()
-
-  //Combining data sets by matching on state values. 
-  let combinedData = geoData.slice(0);
-
-  //GDP Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State) {
-        combinedData[i].properties.GDP = dataGDP[j].GDP;
-      }
-    };
-  };
-
-  //Population Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataPop.length; j++) {
-      if (combinedData[i].properties.name == dataPop[j].State.replace("_"," ")) {
-        combinedData[i].properties.TotalPopulation = dataPop[j].TotalPopulation;
-      }
-    };
-  };
-
-  //Whiteness data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataWhite.length; j++) {
-      if (combinedData[i].properties.name == dataWhite[j].State) {
-        combinedData[i].properties.PercentageWhite = dataWhite[j].PercentageWhite;
-      }
-    };
-  };
-
-  //Vaccination rate data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVax.length; j++) {
-      if (combinedData[i].properties.name == dataVax[j].State) {
-        combinedData[i].properties.VaccinationRate = dataVax[j].VaccinationRate;
-      }
-    };
-  };
-
-  //Voting trends data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVote.length; j++) {
-      if (combinedData[i].properties.name == dataVote[j].State) {
-        combinedData[i].properties.VotePercent = dataVote[j].Percentage;
-        combinedData[i].properties.WinningParty = dataVote[j].PopularWinner;
-      }
-    };
-  };
-
-  // Format data to match expected incoming data
-  mapData = { "type": "FeatureCollection", "features": combinedData };
-
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 1000 ? '#800026' :
@@ -336,7 +312,7 @@ async function getDensityData() {
       });
   }
   //add pop ups to map with color and styling from above. 
-  L.geoJson(mapData,
+  L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
   ).addTo(myMap);
 
@@ -371,74 +347,6 @@ async function getDensityData() {
 };
 
 async function getTotalPopData() {
-  var api_url = "http://127.0.0.1:5000";
-  // Making an API call (request)
-  // and getting the response back
-  var responsePop = await fetch(api_url + "/api/v1.0/population");
-  var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
-  var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
-  var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
-  var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
-
-  // Parsing it to JSON format
-  var dataPop = await responsePop.json();
-  var dataGDP = await responseGDP.json()
-  var dataWhite = await responseWhite.json()
-  var dataVax = await responseVax.json()
-  var dataVote = await responseVote.json()
-
-  //Combining data sets by matching on state values. 
-  let combinedData = geoData.slice(0);
-
-  //GDP Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State) {
-        combinedData[i].properties.GDP = dataGDP[j].GDP;
-      }
-    };
-  };
-
-  //Population Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataPop.length; j++) {
-      if (combinedData[i].properties.name == dataPop[j].State.replace("_"," ")) {
-        combinedData[i].properties.TotalPopulation = dataPop[j].TotalPopulation;
-      }
-    };
-  };
-
-  //Whiteness data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataWhite.length; j++) {
-      if (combinedData[i].properties.name == dataWhite[j].State) {
-        combinedData[i].properties.PercentageWhite = dataWhite[j].PercentageWhite;
-      }
-    };
-  };
-
-  //Vaccination rate data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVax.length; j++) {
-      if (combinedData[i].properties.name == dataVax[j].State) {
-        combinedData[i].properties.VaccinationRate = dataVax[j].VaccinationRate;
-      }
-    };
-  };
-
-  //Voting trends data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVote.length; j++) {
-      if (combinedData[i].properties.name == dataVote[j].State) {
-        combinedData[i].properties.VotePercent = dataVote[j].Percentage;
-        combinedData[i].properties.WinningParty = dataVote[j].PopularWinner;
-      }
-    };
-  };
-  
-  // Format data to match expected incoming data
-  mapData = { "type": "FeatureCollection", "features": combinedData };
-  console.log(mapData)
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 35000000 ? '#800026' :
@@ -467,7 +375,7 @@ async function getTotalPopData() {
       feature.properties.TotalPopulation + " people.<br />");
   }
   //add pop ups to map with color and styling from above. 
-  L.geoJson(mapData,
+  L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
   ).addTo(myMap);
 
@@ -502,97 +410,29 @@ async function getTotalPopData() {
 };
 
 async function getVotingData() {
-  var api_url = "http://127.0.0.1:5000";
-  // Making an API call (request)
-  // and getting the response back
-  var responsePop = await fetch(api_url + "/api/v1.0/population");
-  var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
-  var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
-  var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
-  var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
-
-  // Parsing it to JSON format
-  var dataPop = await responsePop.json();
-  var dataGDP = await responseGDP.json()
-  var dataWhite = await responseWhite.json()
-  var dataVax = await responseVax.json()
-  var dataVote = await responseVote.json()
-
-  //Combining data sets by matching on state values. 
-  let combinedData = geoData.slice(0);
-
-  //GDP Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State) {
-        combinedData[i].properties.GDP = dataGDP[j].GDP;
-      }
-    };
-  };
-
-  //Population Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataPop.length; j++) {
-      if (combinedData[i].properties.name == dataPop[j].State.replace("_"," ")) {
-        combinedData[i].properties.TotalPopulation = dataPop[j].TotalPopulation;
-      }
-    };
-  };
-
-  //Whiteness data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataWhite.length; j++) {
-      if (combinedData[i].properties.name == dataWhite[j].State) {
-        combinedData[i].properties.PercentageWhite = dataWhite[j].PercentageWhite;
-      }
-    };
-  };
-
-  //Vaccination rate data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVax.length; j++) {
-      if (combinedData[i].properties.name == dataVax[j].State) {
-        combinedData[i].properties.VaccinationRate = dataVax[j].VaccinationRate;
-      }
-    };
-  };
-
-  //Voting trends data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVote.length; j++) {
-      if (combinedData[i].properties.name == dataVote[j].State.replace("Norht", "North")) {
-        combinedData[i].properties.VotePercent = dataVote[j].Percentage;
-        combinedData[i].properties.WinningParty = dataVote[j].PopularWinner;
-      }
-    };
-  };
-  
-  // Format data to match expected incoming data
-  mapData = { "type": "FeatureCollection", "features": combinedData };
-  console.log(mapData)
   // Color function for scaling on Map and Legend. 
-  function getColorVote(d,winner) {
+  function getColorVote(d, winner) {
     if (winner === "REPUBLICAN") {
-    return d > .65 ? '#9E1711' :
-      d > .60 ? 'red' :
-        d > .59 ? '#890D15' :
-          d > .57 ? '#A20A19' :
-            d > .55 ? '#BB061C' :
-              d > .52 ? '#D40320' :
-                d > .49 ? '#F1959B' :
-                  '#F6BDC0';
+      return d > .65 ? '#9E1711' :
+        d > .60 ? 'red' :
+          d > .59 ? '#890D15' :
+            d > .57 ? '#A20A19' :
+              d > .55 ? '#BB061C' :
+                d > .52 ? '#D40320' :
+                  d > .49 ? '#F1959B' :
+                    '#F6BDC0';
     }
     else if (winner === "DEMOCRAT") {
       return d > .65 ? '#0000FF' :
-      d > .60 ? '#1F1FFF' :
-        d > .59 ? '#4949FF' :
-          d > .57 ? '#7879FF' :
-            d > .55 ? '#A3A3FF' :
-              d > .52 ? '#BFBFFF' :
-                d > .49 ? '#80BFF7' :
-                  '#CCE5FB';
+        d > .60 ? '#1F1FFF' :
+          d > .59 ? '#4949FF' :
+            d > .57 ? '#7879FF' :
+              d > .55 ? '#A3A3FF' :
+                d > .52 ? '#BFBFFF' :
+                  d > .49 ? '#80BFF7' :
+                    '#CCE5FB';
     }
-}
+  }
 
   // define style elements for map pop ups
   function style(feature) {
@@ -607,10 +447,10 @@ async function getVotingData() {
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
     layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Voted For " +
-      feature.properties.WinningParty + " at a rate of: " + Math.round(feature.properties.VotePercent * 100)+ "% of the total vote.<br />");
+      feature.properties.WinningParty + " at a rate of: " + Math.round(feature.properties.VotePercent * 100) + "% of the total vote.<br />");
   }
   //add pop ups to map with color and styling from above. 
-  L.geoJson(mapData,
+  L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
   ).addTo(myMap);
 
@@ -645,74 +485,6 @@ async function getVotingData() {
 };
 
 async function getWhiteData() {
-  var api_url = "http://127.0.0.1:5000";
-  // Making an API call (request)
-  // and getting the response back
-  var responsePop = await fetch(api_url + "/api/v1.0/population");
-  var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
-  var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
-  var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
-  var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
-
-  // Parsing it to JSON format
-  var dataPop = await responsePop.json();
-  var dataGDP = await responseGDP.json()
-  var dataWhite = await responseWhite.json()
-  var dataVax = await responseVax.json()
-  var dataVote = await responseVote.json()
-
-  //Combining data sets by matching on state values. 
-  let combinedData = geoData.slice(0);
-
-  //GDP Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State) {
-        combinedData[i].properties.GDP = dataGDP[j].GDP;
-      }
-    };
-  };
-
-  //Population Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataPop.length; j++) {
-      if (combinedData[i].properties.name == dataPop[j].State.replace("_"," ")) {
-        combinedData[i].properties.TotalPopulation = dataPop[j].TotalPopulation;
-      }
-    };
-  };
-
-  //Whiteness data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataWhite.length; j++) {
-      if (combinedData[i].properties.name == dataWhite[j].State) {
-        combinedData[i].properties.PercentageWhite = dataWhite[j].PercentageWhite;
-      }
-    };
-  };
-
-  //Vaccination rate data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVax.length; j++) {
-      if (combinedData[i].properties.name == dataVax[j].State) {
-        combinedData[i].properties.VaccinationRate = dataVax[j].VaccinationRate;
-      }
-    };
-  };
-
-  //Voting trends data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVote.length; j++) {
-      if (combinedData[i].properties.name == dataVote[j].State) {
-        combinedData[i].properties.VotePercent = dataVote[j].Percentage;
-        combinedData[i].properties.WinningParty = dataVote[j].PopularWinner;
-      }
-    };
-  };
-  
-  // Format data to match expected incoming data
-  mapData = { "type": "FeatureCollection", "features": combinedData };
-  console.log(mapData)
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 35000000 ? '#800026' :
@@ -741,7 +513,7 @@ async function getWhiteData() {
       Math.round(feature.properties.PercentageWhite * 100) + "% .<br />");
   }
   //add pop ups to map with color and styling from above. 
-  L.geoJson(mapData,
+  L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
   ).addTo(myMap);
 
@@ -776,75 +548,6 @@ async function getWhiteData() {
 };
 
 async function getVaxData() {
-  var api_url = "http://127.0.0.1:5000";
-  // Making an API call (request)
-  // and getting the response back
-  var responsePop = await fetch(api_url + "/api/v1.0/population");
-  var responseGDP = await fetch(api_url + "/api/v1.0/gdp");
-  var responseWhite = await fetch(api_url + "/api/v1.0/whiteness");
-  var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
-  var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
-
-  // Parsing it to JSON format
-  var dataPop = await responsePop.json();
-  var dataGDP = await responseGDP.json()
-  var dataWhite = await responseWhite.json()
-  var dataVax = await responseVax.json()
-  var dataVote = await responseVote.json()
-
-  //Combining data sets by matching on state values. 
-  let combinedData = geoData.slice(0);
-
-  //GDP Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State) {
-        combinedData[i].properties.GDP = dataGDP[j].GDP;
-      }
-    };
-  };
-
-  //Population Data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataPop.length; j++) {
-      if (combinedData[i].properties.name == dataPop[j].State.replace("_"," ")) {
-        combinedData[i].properties.TotalPopulation = dataPop[j].TotalPopulation;
-      }
-    };
-  };
-
-  //Whiteness data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataWhite.length; j++) {
-      if (combinedData[i].properties.name == dataWhite[j].State) {
-        combinedData[i].properties.PercentageWhite = dataWhite[j].PercentageWhite;
-      }
-    };
-  };
-
-  //Vaccination rate data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVax.length; j++) {
-      if (combinedData[i].properties.name == dataVax[j].State) {
-        combinedData[i].properties.VaccinationRate = dataVax[j].VaccinationRate;
-      }
-    };
-  };
-
-  //Voting trends data
-  for (var i = 0; i < combinedData.length; i++) {
-    for (var j = 0; j < dataVote.length; j++) {
-      if (combinedData[i].properties.name == dataVote[j].State) {
-        combinedData[i].properties.VotePercent = dataVote[j].Percentage;
-        combinedData[i].properties.WinningParty = dataVote[j].PopularWinner;
-      }
-    };
-  };
-  
-  // Format data to match expected incoming data
-  mapData = { "type": "FeatureCollection", "features": combinedData };
-  console.log(mapData)
-
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 35000000 ? '#800026' :
@@ -873,7 +576,7 @@ async function getVaxData() {
       Math.round(feature.properties.VaccinationRate * 100) + " people.<br />");
   }
   //add pop ups to map with color and styling from above. 
-  L.geoJson(mapData,
+  L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
   ).addTo(myMap);
 
@@ -905,4 +608,396 @@ async function getVaxData() {
 
   // Adding the legend to the map
   legend.addTo(myMap);
+};
+
+async function getGDPData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 3000000 ? '#800026' :
+      d > 1000000 ? '#BD0026' :
+        d > 500000 ? '#E31A1C' :
+          d > 250000 ? '#FC4E2A' :
+            d > 100000 ? '#FD8D3C' :
+              d > 25000 ? '#FEB24C' :
+                d > 10000 ? '#FED976' :
+                  '#FFEDA0';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.GDP),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a Total GDP per capita of " +
+      feature.properties.GDP + "<br /><br />with a total population of " + feature.properties.TotalPopulation).on({
+      });
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsGDP;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<h1>State GDP</h1><br/>In Thousands of US Dollars" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\">$ " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getDensityData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 1000 ? '#800026' :
+      d > 500 ? '#BD0026' :
+        d > 200 ? '#E31A1C' :
+          d > 100 ? '#FC4E2A' :
+            d > 50 ? '#FD8D3C' :
+              d > 20 ? '#FEB24C' :
+                d > 10 ? '#FED976' :
+                  '#FFEDA0';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.density),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a Population Density (in # of people per square mile) of " +
+      feature.properties.density + "<br /><br />with a total population of " + feature.properties.TotalPopulation).on({
+      });
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsDensity;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<h1>Population Density</h1><br/>in # of people per square mile" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getTotalPopData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 35000000 ? '#800026' :
+      d > 10000000 ? '#BD0026' :
+        d > 5000000 ? '#E31A1C' :
+          d > 2500000 ? '#FC4E2A' :
+            d > 1000000 ? '#FD8D3C' :
+              d > 750000 ? '#FEB24C' :
+                d > 500000 ? '#FED976' :
+                  '#FFEDA0';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.TotalPopulation),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a total population of " +
+      feature.properties.TotalPopulation + " people.<br />");
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsPopulation;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<h1>Total Population</h1><br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getVotingData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColorVote(d, winner) {
+    if (winner === "REPUBLICAN") {
+      return d > .65 ? '#9E1711' :
+        d > .60 ? 'red' :
+          d > .59 ? '#890D15' :
+            d > .57 ? '#A20A19' :
+              d > .55 ? '#BB061C' :
+                d > .52 ? '#D40320' :
+                  d > .49 ? '#F1959B' :
+                    '#F6BDC0';
+    }
+    else if (winner === "DEMOCRAT") {
+      return d > .65 ? '#0000FF' :
+        d > .60 ? '#1F1FFF' :
+          d > .59 ? '#4949FF' :
+            d > .57 ? '#7879FF' :
+              d > .55 ? '#A3A3FF' :
+                d > .52 ? '#BFBFFF' :
+                  d > .49 ? '#80BFF7' :
+                    '#CCE5FB';
+    }
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColorVote(feature.properties.VotePercent, feature.properties.WinningParty),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Voted For " +
+      feature.properties.WinningParty + " at a rate of: " + Math.round(feature.properties.VotePercent * 100) + "% of the total vote.<br />");
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsVoting;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<h1>Total Population</h1><br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getWhiteData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 35000000 ? '#800026' :
+      d > .85 ? '#BD0026' :
+        d > .75 ? '#E31A1C' :
+          d > .65 ? '#FC4E2A' :
+            d > .55 ? '#FD8D3C' :
+              d > .50 ? '#FEB24C' :
+                d > .45 ? '#FED976' :
+                  '#FFEDA0';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.PercentageWhite),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a White population of: " +
+      Math.round(feature.properties.PercentageWhite * 100) + "% .<br />");
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsWhite;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<h1>Percent of White Population</h1><br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getVaxData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 35000000 ? '#800026' :
+      d > 85 ? '#BD0026' :
+        d > 75 ? '#E31A1C' :
+          d > 65 ? '#FC4E2A' :
+            d > 55 ? '#FD8D3C' :
+              d > 50 ? '#FEB24C' :
+                d > 45 ? '#FED976' :
+                  '#FFEDA0';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.VaccinationRate),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a vaccinated population of : " +
+      Math.round(feature.properties.VaccinationRate * 100) + " people.<br />");
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsWhite;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<h1>Percent<br/>Vaccinated</h1><br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
 };
