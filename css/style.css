@@ -1,11 +1,7 @@
 /* css/style.css */
 
 body {
-<<<<<<< HEAD
-    padding: 10px;
-=======
     padding: 0;
->>>>>>> 98e74cc7aff575ab55008413050a7ef0979d5529
     margin: 0;
   }
   
@@ -14,7 +10,7 @@ body {
     height: 100%;
   }
   
-  #map {
+  .map {
     position: relative;
     width: 100%;
     height: 500px;
@@ -28,13 +24,10 @@ body {
     padding: 10px;
   }
 
-<<<<<<< HEAD
-=======
 body,
 html {
   height: 100%;
 }
->>>>>>> 98e74cc7aff575ab55008413050a7ef0979d5529
 
 .leaflet-popup-content {
   text-align: center;
@@ -69,14 +62,3 @@ html {
 .compare-table td:first-child {
   width: 200px;
 }
-<<<<<<< HEAD
-
-ul {
-  list-style-type: none;
-}
-
-div {
-  padding: 2px;
-}
-=======
->>>>>>> 98e74cc7aff575ab55008413050a7ef0979d5529
