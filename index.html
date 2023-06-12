@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Comparison Tables</title>
+  <title>A Comparison of States</title>
 
   <!-- Leaflet JavaScript code-->
   <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
@@ -18,8 +18,6 @@
     integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
     crossorigin="" />
 
-
-
   <!-- Our CSS -->
   <link rel="stylesheet" type="text/css" href="css/style.css">
 
@@ -30,6 +28,17 @@
 <body>
   <div class="container" style="padding: 10px;">
     <div class="row">
+      <h1>Instructions for use</h1>
+    </div>
+    <div class="row">
+      <p>Use these tools to explore data about each of the states in the US.</br></br>
+        <b>Maps:</b> Select datasets from the map visualization dropdowns to see how all the states compare to 
+        each other on various metrics. You can view maps for two different datasets side by side. When a map is 
+      generated, you can click on individual states to view the specific numbers.</br></br>
+        <b>Table</b>: Select two different states from the tables dropdowns to view all data in a side-by-side comparison.
+      </p>
+    </div>
+    <div class="row">
       <div class="col-12" style="margin:0 auto; padding-bottom: 10px;">
         <!-- The div where we'll insert our map -->
         <div id="map"></div>
@@ -38,7 +47,21 @@
         <script src="js/map_backup.js"></script>
       </div>
     </div>
-
+    <div class="row">
+      <label for="map-select">Select Map to compare</label>
+      <select id="mapselect1">
+        <option value="GDP">GDP</option>
+        <option value="Density">Density</option>
+        <option value="TotalPop">Total Population</option>
+        <option value="Voting">Voting Trends</option>
+        <option value="Whiteness">Whiteness</option>
+        <option value="Vaccination">Vaccination Rate</option>
+      </select>
+    </div>
+    <div class="row">
+      <button id="gen-map-button" type="button" onclick="optionChanged()">Generate Map</button>
+      <button id="res-map-button" type="button" onclick="clearMap()">Reset Map</button>
+    </div>
     <div class="row">
       <label for="states-list1">
         Select First State to Compare
@@ -165,5 +188,13 @@
     </div>
   </div>
 </body>
+<footer>
+  <p>Data has been ethically sourced from the following locations:</br>
+GDP, Total Population, and Whiteness: <a href="https://www.census.gov/data/developers/data-sets/decennial-census.html">2020 US Decennial Census</a></br>
+Density: <a href="https://leafletjs.com/examples/choropleth/us-states.js">US States Data from Leaflet.js</a></br>
+Voting Trends: <a href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX">2020 presidential election results from MIT Election Data and Science Lab "U.S. President 1976–2020" from Harvard Dataverse</a></br>
+Vaccination Rate: <a href="https://ourworldindata.org/us-states-vaccinations">State-by-state data on COVID-19 vaccinations in the United States from Our World in Data</a></br>
+  </p>
+</footer>
 
 </html>
