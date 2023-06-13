@@ -20,8 +20,6 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap2);
 
-// getGDPData();
-// getDensityData2();
 
 var geoData =
   // {"type":"FeatureCollection","features":
@@ -83,7 +81,7 @@ var geojson = {
   options: {
     limitsGDP: [3000000, 1000000, 500000, 250000, 100000, 25000, 10000],
     colors: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
-    colorsVoting1: ['99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
+    colorsVoting1: ['#99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
     colorsVoting2: ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'],
     limitsDensity: [1000, 500, 200, 50, 20, 10, 1],
     limitsPopulation: [35000000, 10000000, 5000000, 2500000, 1000000, 750000, 500000],
@@ -245,8 +243,8 @@ async function getGDPData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a Total GDP per capita of " +
-      feature.properties.GDP + "<br /><br />with a total population of " + feature.properties.TotalPopulation).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): $" +
+    feature.properties.GDP).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -263,7 +261,7 @@ async function getGDPData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>State GDP</h1><br/>In Thousands of US Dollars" +
+    var legendInfo = "<strong>State GDP</strong><br/>In Thousands<br/>of US Dollars" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -272,7 +270,7 @@ async function getGDPData() {
 
     // define legend HTML by passing colors. 
     limits.forEach(function (limit, index) {
-      labels.push("<li style=\"background-color: " + colors[index] + "\">$ " + limits[index] + "</li>");
+      labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\">$ " + limits[index] + "</li>");
     });
 
     // add background colors to legend. 
@@ -309,8 +307,8 @@ async function getDensityData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a Population Density (in # of people per square mile) of " +
-      feature.properties.density + "<br /><br />with a total population of " + feature.properties.TotalPopulation).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Population Density (people/mi&sup2;): " +
+      feature.properties.density).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -327,7 +325,7 @@ async function getDensityData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Population Density</h1><br/>in # of people per square mile" +
+    var legendInfo = "<strong>Population<br/> Density</strong><br/>in # of people <br/>per square mile" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -373,8 +371,8 @@ async function getTotalPopData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a total population of " +
-      feature.properties.TotalPopulation + " people.<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Total Population: " +
+      feature.properties.TotalPopulation);
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -390,7 +388,7 @@ async function getTotalPopData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Total Population</h1><br/>" +
+    var legendInfo = "<strong>Total<br/> Population</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -448,8 +446,7 @@ async function getVotingData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Voted For " +
-      feature.properties.WinningParty + " at a rate of: " + Math.round(feature.properties.VotePercent * 100) + "% of the total vote.<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + Math.round(feature.properties.VotePercent * 100) + "% voted " + feature.properties.WinningParty);
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -465,7 +462,7 @@ async function getVotingData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Republican Winner Percentage</h1><br/>" +
+    var legendInfo = "<Strong>Republican Winner<br/> Percentage</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -494,7 +491,7 @@ async function getVotingData() {
       var labels = [];
   
       // Add the legend title and units.
-      var legend2Info = "<h1>Democrat Winner Percentage</h1><br/>" +
+      var legend2Info = "<strong>Democrat Winner<br/> Percentage</strong><br/>" +
         "<div class=\"labels\">" +
         "</div>";
   
@@ -540,8 +537,8 @@ async function getWhiteData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a White population of: " +
-      Math.round(feature.properties.PercentageWhite * 100) + "% .<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" +
+      Math.round(feature.properties.PercentageWhite * 100) + "% white<br />");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -557,7 +554,7 @@ async function getWhiteData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Percent of White Population</h1><br/>" +
+    var legendInfo = "<strong>Percent of <br/>White Population</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -603,8 +600,8 @@ async function getVaxData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a vaccinated population of : " +
-      Math.round(feature.properties.VaccinationRate * 100) + " people.<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Vaccination Rate: " +
+      Math.round(feature.properties.VaccinationRate) + "%<br />");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -620,7 +617,7 @@ async function getVaxData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Percent<br/>Vaccinated</h1><br/>" +
+    var legendInfo = "<strong>Percent<br/>Vaccinated</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -666,8 +663,8 @@ async function getGDPData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a Total GDP per capita of " +
-      feature.properties.GDP + "<br /><br />with a total population of " + feature.properties.TotalPopulation).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): $" +
+      feature.properties.GDP).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -684,7 +681,7 @@ async function getGDPData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>State GDP</h1><br/>In Thousands of US Dollars" +
+    var legendInfo = "<strong>Population<br/> Density</strong><br/>in # of people <br/>per square mile" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -730,8 +727,8 @@ async function getDensityData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a Population Density (in # of people per square mile) of " +
-      feature.properties.density + "<br /><br />with a total population of " + feature.properties.TotalPopulation).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Population Density (people/mi&sup2;): " +
+      feature.properties.density).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -748,7 +745,7 @@ async function getDensityData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Population Density</h1><br/>in # of people per square mile" +
+    var legendInfo = "<strong>Population<br/> Density</strong><br/>in # of people <br/>per square mile" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -794,8 +791,8 @@ async function getTotalPopData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a total population of " +
-      feature.properties.TotalPopulation + " people.<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Total Population: " +
+      feature.properties.TotalPopulation);
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -811,7 +808,7 @@ async function getTotalPopData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Total Population</h1><br/>" +
+    var legendInfo = "<strong>Total<br/> Population</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -869,8 +866,7 @@ async function getVotingData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Voted For " +
-      feature.properties.WinningParty + " at a rate of: " + Math.round(feature.properties.VotePercent * 100) + "% of the total vote.<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + Math.round(feature.properties.VotePercent * 100) + "% voted " + feature.properties.WinningParty);
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -886,7 +882,7 @@ async function getVotingData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Republican Winner Percentage</h1><br/>" +
+    var legendInfo = "<Strong>Republican Winner<br/> Percentage</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -904,7 +900,7 @@ async function getVotingData2() {
   };
 
   // Adding the legend to the map
-  legend.addTo(myMap);
+  legend.addTo(myMap2);
 
     // Set up the legend.
     var legend2 = L.control({ position: "bottomleft" });
@@ -915,7 +911,7 @@ async function getVotingData2() {
       var labels = [];
   
       // Add the legend title and units.
-      var legend2Info = "<h1>Democrat Winner Percentage</h1><br/>" +
+      var legend2Info =  "<strong>Democrat Winner<br/> Percentage</strong><br/>" +
         "<div class=\"labels\">" +
         "</div>";
   
@@ -933,7 +929,7 @@ async function getVotingData2() {
     };
   
     // Adding the legend to the map
-    legend2.addTo(myMap);
+    legend2.addTo(myMap2);
 };
 
 async function getWhiteData2() {
@@ -961,8 +957,8 @@ async function getWhiteData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a White population of: " +
-      Math.round(feature.properties.PercentageWhite * 100) + "% .<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" +
+      Math.round(feature.properties.PercentageWhite * 100) + "% white<br />");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -978,7 +974,7 @@ async function getWhiteData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Percent of White Population</h1><br/>" +
+    var legendInfo =  "<strong>Percent of <br/>White Population</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -1024,8 +1020,8 @@ async function getVaxData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br /><br />Has a vaccinated population of : " +
-      Math.round(feature.properties.VaccinationRate * 100) + " people.<br />");
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Vaccination Rate: " +
+      Math.round(feature.properties.VaccinationRate) + "%<br />");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -1041,7 +1037,7 @@ async function getVaxData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Percent<br/>Vaccinated</h1><br/>" +
+    var legendInfo = "<strong>Percent<br/>Vaccinated</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 

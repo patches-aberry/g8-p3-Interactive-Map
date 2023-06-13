@@ -112,3 +112,17 @@ button:hover {
 button:active {
   background-color: #0f5073;
 }
+
+/* Legend Formatting */
+.table-legend {
+  width: 100px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.leaflet-control {
+  font-size: 12px;
+}

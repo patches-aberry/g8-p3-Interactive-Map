@@ -35,19 +35,15 @@
         <b>Maps:</b> Select datasets from the map visualization dropdowns to see how all the states compare to
         each other on various metrics. You can view maps for two different datasets side by side. When a map is
         generated, you can click on individual states to view the specific numbers.</br></br>
-        <b>Table</b>: Select two different states from the tables dropdowns to view all data in a side-by-side
-        comparison.
       </p>
     </div>
     <div class="row">
       <div class="col-6" style="margin:0 auto; padding-bottom: 10px;">
         <!-- The div where we'll insert our map -->
-<<<<<<< HEAD
         <div id="map"></div>
         <!-- leaflet-choropleth JavaScript -->
         <script type="text/javascript" src="js/choropleth.js"></script>
         <script src="js/map_backup_colors.js"></script>
-=======
         <div class="map" id="map1"></div>
       </div>
       <div class="col-6" style="margin:0 auto; padding-bottom: 10px;">
@@ -77,11 +73,15 @@
       <div class="row">
         <button id="gen-map-button" type="button" onclick="optionChanged()">Generate Maps</button>&ensp;
         <button id="res-map-button" type="button" onclick="clearMap()">Reset Maps</button>
->>>>>>> b643e17df9ffe8263a4d5e70ddd5b1178266b70f
       </div>
     </div>
   </div>
   <div class="container table-container">
+    <div class="row">
+        <b>Table:</b> Select two different states from the tables dropdowns to view all data in a side-by-side
+        comparison. United States values have been added for comparison.
+        <br/>
+    </div>
     <div class="row">
       <label for="states-list1">
         Select First State to Compare in Table Form
@@ -208,7 +208,6 @@
     </div>
   </div>
   <script type="text/javascript" src="js/choropleth.js"></script>
-  <script src="js/map_backup_forsecondmap.js"></script>
   <script src="js/map_backup.js"></script>
 </body>
 <footer>
