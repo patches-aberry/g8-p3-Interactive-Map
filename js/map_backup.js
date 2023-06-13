@@ -82,7 +82,9 @@ var geoData =
 var geojson = {
   options: {
     limitsGDP: [3000000, 1000000, 500000, 250000, 100000, 25000, 10000],
-    colors: ['#800026', '#BD0026', '#E31A1C', '#FC4E2A', '#FD8D3C', '#FEB24C', '#FED976', '#FFEDA0'],
+    colors: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
+    colorsVoting1: ['99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
+    colorsVoting2: ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'],
     limitsDensity: [1000, 500, 200, 50, 20, 10, 1],
     limitsPopulation: [35000000, 10000000, 5000000, 2500000, 1000000, 750000, 500000],
     limitsVoting: [.65, .60, .59, .57, .55, .52, .49],
@@ -221,14 +223,14 @@ getData();
 async function getGDPData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 3000000 ? '#800026' :
-      d > 1000000 ? '#BD0026' :
-        d > 500000 ? '#E31A1C' :
-          d > 250000 ? '#FC4E2A' :
-            d > 100000 ? '#FD8D3C' :
-              d > 25000 ? '#FEB24C' :
-                d > 10000 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 3000000 ? '#005a32' :
+      d > 1000000 ? '#238b45' :
+        d > 500000 ? '#41ab5d' :
+          d > 250000 ? '#74c476' :
+            d > 100000 ? '#a1d99b' :
+              d > 25000 ? '#c7e9c0' :
+                d > 10000 ? '#e5f5e0' :
+                  '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -285,14 +287,14 @@ async function getGDPData() {
 async function getDensityData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 1000 ? '#800026' :
-      d > 500 ? '#BD0026' :
-        d > 200 ? '#E31A1C' :
-          d > 100 ? '#FC4E2A' :
-            d > 50 ? '#FD8D3C' :
-              d > 20 ? '#FEB24C' :
-                d > 10 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 1000 ? '#005a32' :
+    d > 500 ? '#238b45' :
+      d > 200 ? '#41ab5d' :
+        d > 100 ? '#74c476' :
+          d > 50 ? '#a1d99b' :
+            d > 20 ? '#c7e9c0' :
+              d > 10 ? '#e5f5e0' :
+                '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -348,15 +350,15 @@ async function getDensityData() {
 
 async function getTotalPopData() {
   // Color function for scaling on Map and Legend. 
-  function getColor(d) {
-    return d > 35000000 ? '#800026' :
-      d > 10000000 ? '#BD0026' :
-        d > 5000000 ? '#E31A1C' :
-          d > 2500000 ? '#FC4E2A' :
-            d > 1000000 ? '#FD8D3C' :
-              d > 750000 ? '#FEB24C' :
-                d > 500000 ? '#FED976' :
-                  '#FFEDA0';
+    function getColor(d) {
+      return d > 35000000 ? '#005a32' :
+        d > 10000000 ? '#238b45' :
+          d > 5000000 ? '#41ab5d' :
+            d > 2500000 ? '#74c476' :
+              d > 1000000 ? '#a1d99b' :
+                d > 750000 ? '#c7e9c0' :
+                  d > 500000 ? '#e5f5e0' :
+                    '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -412,25 +414,25 @@ async function getTotalPopData() {
 async function getVotingData() {
   // Color function for scaling on Map and Legend. 
   function getColorVote(d, winner) {
-    if (winner === "REPUBLICAN") {
-      return d > .65 ? '#9E1711' :
-        d > .60 ? 'red' :
-          d > .59 ? '#890D15' :
-            d > .57 ? '#A20A19' :
-              d > .55 ? '#BB061C' :
-                d > .52 ? '#D40320' :
-                  d > .49 ? '#F1959B' :
-                    '#F6BDC0';
-    }
-    else if (winner === "DEMOCRAT") {
-      return d > .65 ? '#0000FF' :
-        d > .60 ? '#1F1FFF' :
-          d > .59 ? '#4949FF' :
-            d > .57 ? '#7879FF' :
-              d > .55 ? '#A3A3FF' :
-                d > .52 ? '#BFBFFF' :
-                  d > .49 ? '#80BFF7' :
-                    '#CCE5FB';
+    if (winner === "Republican") {
+      return d > .65 ? '#99000d' :
+        d > .60 ? '#cb181d' :
+          d > .59 ? '#ef3b2c' :
+            d > .57 ? '#fb6a4a' :
+              d > .55 ? '#fc9272' :
+                d > .52 ? '#fcbba1' :
+                  d > .49 ? '#fee0d2' :
+                    '#fff5f0';
+      }
+      else if (winner === "Democrat") {
+        return d > .65 ? '#084594' :
+        d > .60 ? '#2171b5' :
+          d > .59 ? '#4292c6' :
+            d > .57 ? '#6baed6' :
+              d > .55 ? '#9ecae1' :
+                d > .52 ? '#c6dbef' :
+                  d > .49 ? '#deebf7' :
+                    '#f7fbff';
     }
   }
 
@@ -459,11 +461,11 @@ async function getVotingData() {
   legend.onAdd = function () {
     var div = L.DomUtil.create("div", "info legend");
     var limits = geojson.options.limitsVoting;
-    var colors = geojson.options.colors;
+    var colors = geojson.options.colorsVoting1;
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Total Population</h1><br/>" +
+    var legendInfo = "<h1>Republican Winner Percentage</h1><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -482,19 +484,48 @@ async function getVotingData() {
 
   // Adding the legend to the map
   legend.addTo(myMap);
+
+    // Set up the legend.
+    var legend2 = L.control({ position: "bottomleft" });
+    legend2.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson.options.limitsVoting;
+      var colors = geojson.options.colorsVoting2;
+      var labels = [];
+  
+      // Add the legend title and units.
+      var legend2Info = "<h1>Democrat Winner Percentage</h1><br/>" +
+        "<div class=\"labels\">" +
+        "</div>";
+  
+      // Add legend to map HTML. 
+      div.innerHTML = legend2Info;
+  
+      // define legend HTML by passing colors. 
+      limits.forEach(function (limit, index) {
+        labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+      });
+  
+      // add background colors to legend. 
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+  
+    // Adding the legend to the map
+    legend2.addTo(myMap);
 };
 
 async function getWhiteData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 35000000 ? '#800026' :
-      d > .85 ? '#BD0026' :
-        d > .75 ? '#E31A1C' :
-          d > .65 ? '#FC4E2A' :
-            d > .55 ? '#FD8D3C' :
-              d > .50 ? '#FEB24C' :
-                d > .45 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 35000000 ? '#005a32' :
+      d > .85 ? '#238b45' :
+        d > .75 ? '#41ab5d' :
+          d > .65 ? '#74c476' :
+            d > .55 ? '#a1d99b' :
+              d > .50 ? '#c7e9c0' :
+                d > .45 ? '#e5f5e0' :
+                  '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -550,14 +581,14 @@ async function getWhiteData() {
 async function getVaxData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 35000000 ? '#800026' :
-      d > 85 ? '#BD0026' :
-        d > 75 ? '#E31A1C' :
-          d > 65 ? '#FC4E2A' :
-            d > 55 ? '#FD8D3C' :
-              d > 50 ? '#FEB24C' :
-                d > 45 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 35000000 ? '#005a32' :
+      d > 85 ? '#238b45' :
+        d > 75 ? '#41ab5d' :
+          d > 65 ? '#74c476' :
+            d > 55 ? '#a1d99b' :
+              d > 50 ? '#c7e9c0' :
+                d > 45 ? '#e5f5e0' :
+                  '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -613,14 +644,14 @@ async function getVaxData() {
 async function getGDPData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 3000000 ? '#800026' :
-      d > 1000000 ? '#BD0026' :
-        d > 500000 ? '#E31A1C' :
-          d > 250000 ? '#FC4E2A' :
-            d > 100000 ? '#FD8D3C' :
-              d > 25000 ? '#FEB24C' :
-                d > 10000 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 3000000 ? '#005a32' :
+      d > 1000000 ? '#238b45' :
+        d > 500000 ? '#41ab5d' :
+          d > 250000 ? '#74c476' :
+            d > 100000 ? '#a1d99b' :
+              d > 25000 ? '#c7e9c0' :
+                d > 10000 ? '#e5f5e0' :
+                  '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -677,14 +708,14 @@ async function getGDPData2() {
 async function getDensityData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 1000 ? '#800026' :
-      d > 500 ? '#BD0026' :
-        d > 200 ? '#E31A1C' :
-          d > 100 ? '#FC4E2A' :
-            d > 50 ? '#FD8D3C' :
-              d > 20 ? '#FEB24C' :
-                d > 10 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 1000 ? '#005a32' :
+    d > 500 ? '#238b45' :
+      d > 200 ? '#41ab5d' :
+        d > 100 ? '#74c476' :
+          d > 50 ? '#a1d99b' :
+            d > 20 ? '#c7e9c0' :
+              d > 10 ? '#e5f5e0' :
+                '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -741,14 +772,14 @@ async function getDensityData2() {
 async function getTotalPopData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 35000000 ? '#800026' :
-      d > 10000000 ? '#BD0026' :
-        d > 5000000 ? '#E31A1C' :
-          d > 2500000 ? '#FC4E2A' :
-            d > 1000000 ? '#FD8D3C' :
-              d > 750000 ? '#FEB24C' :
-                d > 500000 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 35000000 ? '#005a32' :
+    d > 10000000 ? '#238b45' :
+      d > 5000000 ? '#41ab5d' :
+        d > 2500000 ? '#74c476' :
+          d > 1000000 ? '#a1d99b' :
+            d > 750000 ? '#c7e9c0' :
+              d > 500000 ? '#e5f5e0' :
+                '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -804,25 +835,25 @@ async function getTotalPopData2() {
 async function getVotingData2() {
   // Color function for scaling on Map and Legend. 
   function getColorVote(d, winner) {
-    if (winner === "REPUBLICAN") {
-      return d > .65 ? '#9E1711' :
-        d > .60 ? 'red' :
-          d > .59 ? '#890D15' :
-            d > .57 ? '#A20A19' :
-              d > .55 ? '#BB061C' :
-                d > .52 ? '#D40320' :
-                  d > .49 ? '#F1959B' :
-                    '#F6BDC0';
-    }
-    else if (winner === "DEMOCRAT") {
-      return d > .65 ? '#0000FF' :
-        d > .60 ? '#1F1FFF' :
-          d > .59 ? '#4949FF' :
-            d > .57 ? '#7879FF' :
-              d > .55 ? '#A3A3FF' :
-                d > .52 ? '#BFBFFF' :
-                  d > .49 ? '#80BFF7' :
-                    '#CCE5FB';
+    if (winner === "Republican") {
+      return d > .65 ? '#99000d' :
+        d > .60 ? '#cb181d' :
+          d > .59 ? '#ef3b2c' :
+            d > .57 ? '#fb6a4a' :
+              d > .55 ? '#fc9272' :
+                d > .52 ? '#fcbba1' :
+                  d > .49 ? '#fee0d2' :
+                    '#fff5f0';
+      }
+      else if (winner === "Democrat") {
+        return d > .65 ? '#084594' :
+        d > .60 ? '#2171b5' :
+          d > .59 ? '#4292c6' :
+            d > .57 ? '#6baed6' :
+              d > .55 ? '#9ecae1' :
+                d > .52 ? '#c6dbef' :
+                  d > .49 ? '#deebf7' :
+                    '#f7fbff';
     }
   }
 
@@ -851,11 +882,11 @@ async function getVotingData2() {
   legend.onAdd = function () {
     var div = L.DomUtil.create("div", "info legend");
     var limits = geojson.options.limitsVoting;
-    var colors = geojson.options.colors;
+    var colors = geojson.options.colorsVoting1;
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<h1>Total Population</h1><br/>" +
+    var legendInfo = "<h1>Republican Winner Percentage</h1><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -873,20 +904,49 @@ async function getVotingData2() {
   };
 
   // Adding the legend to the map
-  legend.addTo(myMap2);
+  legend.addTo(myMap);
+
+    // Set up the legend.
+    var legend2 = L.control({ position: "bottomleft" });
+    legend2.onAdd = function () {
+      var div = L.DomUtil.create("div", "info legend");
+      var limits = geojson.options.limitsVoting;
+      var colors = geojson.options.colorsVoting2;
+      var labels = [];
+  
+      // Add the legend title and units.
+      var legend2Info = "<h1>Democrat Winner Percentage</h1><br/>" +
+        "<div class=\"labels\">" +
+        "</div>";
+  
+      // Add legend to map HTML. 
+      div.innerHTML = legend2Info;
+  
+      // define legend HTML by passing colors. 
+      limits.forEach(function (limit, index) {
+        labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+      });
+  
+      // add background colors to legend. 
+      div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+      return div;
+    };
+  
+    // Adding the legend to the map
+    legend2.addTo(myMap);
 };
 
 async function getWhiteData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 35000000 ? '#800026' :
-      d > .85 ? '#BD0026' :
-        d > .75 ? '#E31A1C' :
-          d > .65 ? '#FC4E2A' :
-            d > .55 ? '#FD8D3C' :
-              d > .50 ? '#FEB24C' :
-                d > .45 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 35000000 ? '#005a32' :
+      d > .85 ? '#238b45' :
+        d > .75 ? '#41ab5d' :
+          d > .65 ? '#74c476' :
+            d > .55 ? '#a1d99b' :
+              d > .50 ? '#c7e9c0' :
+                d > .45 ? '#e5f5e0' :
+                  '#f7fcf5';
   }
 
   // define style elements for map pop ups
@@ -942,14 +1002,14 @@ async function getWhiteData2() {
 async function getVaxData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 35000000 ? '#800026' :
-      d > 85 ? '#BD0026' :
-        d > 75 ? '#E31A1C' :
-          d > 65 ? '#FC4E2A' :
-            d > 55 ? '#FD8D3C' :
-              d > 50 ? '#FEB24C' :
-                d > 45 ? '#FED976' :
-                  '#FFEDA0';
+    return d > 35000000 ? '#005a32' :
+    d > 85 ? '#238b45' :
+      d > 75 ? '#41ab5d' :
+        d > 65 ? '#74c476' :
+          d > 55 ? '#a1d99b' :
+            d > 50 ? '#c7e9c0' :
+              d > 45 ? '#e5f5e0' :
+                '#f7fcf5';
   }
 
   // define style elements for map pop ups
