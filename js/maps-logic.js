@@ -83,7 +83,7 @@ var geojson = {
     colors: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
     colorsVoting1: ['#99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
     colorsVoting2: ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'],
-    colorsWine: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
+    colorsWine: ['#4a1486', '#6a51a3', '#807dba', '#9e9ac8', '#bcbddc', '#dadaeb', '#efedf5', '#fcfbfd'],
     colorsVoteEC: ['#FF0000', '#0000FF'],
     limitsDensity: [1000, 500, 200, 50, 20, 10, 1],
     limitsPopulation: [35000000, 10000000, 5000000, 2500000, 1000000, 750000, 500000],
@@ -807,14 +807,14 @@ async function getVaxData() {
 async function getWineData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 100000000 ? '#005a32' :
-      d > 20000000 ? '#238b45' :
-        d > 10000000 ? '#41ab5d' :
-          d > 2000000 ? '#74c476' :
-            d > 1000000 ? '#a1d99b' :
-              d > 500000 ? '#c7e9c0' :
-                d > 100000 ? '#e5f5e0' :
-                  '#f7fcf5';
+    return d > 100000000 ? '#4a1486' :
+      d > 20000000 ? '#6a51a3' :
+        d > 10000000 ? '#807dba' :
+          d > 2000000 ? '#9e9ac8' :
+            d > 1000000 ? '#bcbddc' :
+              d > 500000 ? '#dadaeb' :
+                d > 100000 ? '#efedf5' :
+                  '#fcfbfd';
   }
 
   // define style elements for map pop ups
@@ -843,7 +843,7 @@ async function getWineData() {
   legend.onAdd = function () {
     var div = L.DomUtil.create("div", "info legend");
     var limits = geojson.options.limitsWine;
-    var colors = geojson.options.colors;
+    var colors = geojson.options.colorsWine;
     var labels = [];
 
     // Add the legend title and units.
@@ -1291,14 +1291,14 @@ async function getVaxData2() {
 async function getWineData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 100000000 ? '#005a32' :
-      d > 20000000 ? '#238b45' :
-        d > 10000000 ? '#41ab5d' :
-          d > 2000000 ? '#74c476' :
-            d > 1000000 ? '#a1d99b' :
-              d > 500000 ? '#c7e9c0' :
-                d > 100000 ? '#e5f5e0' :
-                  '#f7fcf5';
+    return d > 100000000 ? '#4a1486' :
+      d > 20000000 ? '#6a51a3' :
+        d > 10000000 ? '#807dba' :
+          d > 2000000 ? '#9e9ac8' :
+            d > 1000000 ? '#bcbddc' :
+              d > 500000 ? '#dadaeb' :
+                d > 100000 ? '#efedf5' :
+                  '#fcfbfd';
   }
 
   // define style elements for map pop ups
@@ -1327,7 +1327,7 @@ async function getWineData2() {
   legend.onAdd = function () {
     var div = L.DomUtil.create("div", "info legend");
     var limits = geojson.options.limitsWine;
-    var colors = geojson.options.colors;
+    var colors = geojson.options.colorsWine;
     var labels = [];
 
     // Add the legend title and units.
