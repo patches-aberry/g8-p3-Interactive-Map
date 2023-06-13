@@ -29,7 +29,7 @@ Data was ethically sourced from the following locations:
 ### How it works
 Users can use the mapping tool by selecting a dataset from the dropdown menu and generating the choropleth map. Color gradients show the relative data between states, and clicking on individual states will display a popup that includes the specific numbers for that state. Two maps can be displayed side by side for quick comparisons between various metrics.
 
-Users can use the table tool by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states.
+Users can use the table tool by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states, along with data for the country as a whole.
 
 To run the program, launch the Flask API and open the Index file in your browser.
 
