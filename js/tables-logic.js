@@ -43,7 +43,7 @@ function generateResultTable() {
     var tr2 = "<tr><th>" + "GDP (USD)" +              "</th><td>" + s1GDP[0].GDP.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) + "</td><td>" + s2GDP[0].GDP.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) + "</td><td>" + "$23,320,000,000.00" + "</th></tr>";
     var tr3 = "<tr><th>" + "Whiteness" +        "</th><td>" + Math.round(s1White[0].PercentageWhite*100) + "%</th><td>" + Math.round(s2White[0].PercentageWhite*100) + "%</td><td>" + "76%" + "</td></tr>";
     var tr4 = "<tr><th>" + "Vaccination Rate" + "</th><td>" + Math.round(s1Vax[0].VaccinationRate) + "%</td><td>" + Math.round(s2Vax[0].VaccinationRate) + "%</td><td>" + "70%" + "</td></tr>";
-    var tr5 = "<tr><th>" + "Voting Trend" +     "</th><td>" + Math.round(s1Vote[0].Percentage * 100) + "% " + s1Vote[0].PopularWinner + "</td><td>" + Math.round(s2Vote[0].Percentage * 100) + "% " + s2Vote[0].PopularWinner + "</td><td>" + "51% Democratic" + "</td></tr>";
+    var tr5 = "<tr><th>" + "Voting Trend" +     "</th><td>" + Math.round(s1Vote[0].Percentage * 100) + "% " + s1Vote[0].PopularWinner + "ic</td><td>" + Math.round(s2Vote[0].Percentage * 100) + "% " + s2Vote[0].PopularWinner + "ic</td><td>" + "51% Democratic" + "</td></tr>";
     var tr6 = "<tr><th>" + "Wine Production (gal)" + "</th><td>" + s1Wine[0].WineProduction.toLocaleString('en-US') + "</td><td>" + s2Wine[0].WineProduction.toLocaleString('en-US') + "</td><td>" + "806,135,820" + "</td></tr>";
     result += "<table border=&quot;1&quot;><thead><tr><th>Data Values</th><th>" + state1 + "</th><th>" + state2 + "</th><th>United States</th></tr></thead><tbody>" + tr1 + tr2 + tr3 + tr4 + tr5 + tr6 + "</tbody></table>";
     

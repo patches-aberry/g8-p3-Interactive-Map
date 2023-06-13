@@ -91,7 +91,7 @@ var geojson = {
     limitsWhite: ['85%', '75%', '65%', '55%', '50%', '45%'],
     limitsWine: ['100,000,000', '20,000,000', '10,000,000', '2,000,000', '1,000,000', '500,000', '100,000'],
     limitsGDPpc: ['100,000', '90,000', '80,000', '70,000', '60,000', '50,000', '40,000'],
-    limitsVoteEC: ["Republican", "Democrat"]
+    limitsVoteEC: ["Republican", "Democratic"]
   }
 }
 
@@ -611,7 +611,7 @@ async function getVotingData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legend2Info = "<strong>Democrat Winner<br/> Percentage</strong><br/>" +
+    var legend2Info = "<strong>Democratic Winner<br/> Percentage</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -1171,7 +1171,7 @@ async function getVotingData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legend2Info = "<strong>Democrat Winner<br/> Percentage</strong><br/>" +
+    var legend2Info = "<strong>Democratic Winner<br/> Percentage</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
