@@ -38,4 +38,5 @@ There are several opportunities to build upon this project further:
 * Refactoring the code to make it more adaptable and concise
 * Deploying the API and visualization websites
 * Adding more datasets
+* Making datasets more dynamic
 * Automatically resetting the maps when selecting a new dataset
