@@ -1,28 +1,30 @@
 /* css/style.css */
 
 body {
-    padding: 0;
-    margin: 0;
-  }
-  
-  body,
-  html {
-    height: 100%;
-  }
-  
-  .map {
-    position: relative;
-    width: 100%;
-    height: 500px;
+  padding: 0;
+  margin: 0;
 }
 
-  .leaflet-popup-content {
-    text-align: center;
-  }
-  
-  tr,td,th {
-    padding: 10px;
-  }
+body,
+html {
+  height: 100%;
+}
+
+.map {
+  position: relative;
+  width: 100%;
+  height: 500px;
+}
+
+.leaflet-popup-content {
+  text-align: center;
+}
+
+tr,
+td,
+th {
+  padding: 10px;
+}
 
 body,
 html {
@@ -33,32 +35,80 @@ html {
   text-align: center;
 }
 
+/* For Tables */
 .compare-table {
-  margin-top: 20px;
   border-collapse: collapse;
-  width: 100%;
+  margin: 25px 0;
+  font-size: 0.9em;
+  font-family: sans-serif;
+  min-width: 400px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.compare-table thead tr {
+  background-color: #009890;
+  color: #ffffff;
+  text-align: left;
 }
 
 .compare-table th,
 .compare-table td {
-  padding: 8px;
-  border: 1px solid #ddd;
-  text-align: left;
+  padding: 12px 15px;
 }
 
-.compare-table th {
-  background-color: #f2f2f2;
+.compare-table tbody tr {
+  border-bottom: 1px solid #dddddd;
 }
 
-.compare-table tr:nth-child(even) {
-  background-color: #f9f9f9;
+.compare-table tbody tr:nth-of-type(even) {
+  background-color: #f3f3f3;
 }
 
-.compare-table tr:hover {
-  background-color: #f2f2f2;
+.compare-table tbody tr:last-of-type {
+  border-bottom: 2px solid #009890;
 }
 
-.compare-table th:first-child,
-.compare-table td:first-child {
-  width: 200px;
+.compare-table tbody tr.active-row {
+  font-weight: bold;
+  color: #009890;
+}
+
+/* For Picklists */
+select {
+  width: 120px;
+  height: 30px;
+  border: 1px solid #999;
+  font-size: 18px;
+  color: #009890;
+  background-color: #eee;
+  border-radius: 5px;
+  box-shadow: 4px 4px #ccc;
+}
+
+select:hover {
+  border-color: #999;
+}
+
+select:focus {
+  outline: none;
+  box-shadow: 0 0 5px #009890;
+}
+
+/* For Buttons */
+button {
+  background-color: #009890;
+  color: #fff;
+  padding: 5px 8px;
+  font-size: 16px;
+  border: 1px solid #999;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #156b98;
+}
+
+button:active {
+  background-color: #0f5073;
 }
