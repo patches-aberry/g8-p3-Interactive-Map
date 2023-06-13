@@ -83,10 +83,12 @@ var geojson = {
     colors: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
     colorsVoting1: ['#99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
     colorsVoting2: ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'],
+    colorsWine: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
     limitsDensity: [1000, 500, 200, 50, 20, 10, 1],
     limitsPopulation: [35000000, 10000000, 5000000, 2500000, 1000000, 750000, 500000],
     limitsVoting: [.65, .60, .59, .57, .55, .52, .49],
-    limitsWhite: [.85, .75, .65, .55, .50, .45]
+    limitsWhite: [.85, .75, .65, .55, .50, .45],
+    limitsWine: [100000000, 20000000, 10000000, 2000000, 1000000, 500000, 100000]
   }
 }
 
@@ -113,6 +115,9 @@ function funcSelectMap1(SelectID) {
   else if (SelectID === "Vaccination") {
     getVaxData();
   }
+  else if (SelectID === "WineProd") {
+    getWineData();
+  }
 }
 
 function funcSelectMap2(SelectID2) {
@@ -133,6 +138,9 @@ function funcSelectMap2(SelectID2) {
   }
   else if (SelectID2 === "Vaccination") {
     getVaxData2();
+  }
+  else if (SelectID2 === "WineProd") {
+    getWineData2();
   }
 }
 
@@ -222,7 +230,7 @@ async function getData() {
   // Format data to match expected incoming data
   let mapData = { "type": "FeatureCollection", "features": combinedData };
   return mapData;
-  
+
 }
 
 async function getGDPData() {
@@ -634,6 +642,70 @@ async function getVaxData() {
     // define legend HTML by passing colors. 
     limits.forEach(function (limit, index) {
       labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap);
+};
+
+async function getWineData() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 3000000 ? '#005a32' :
+      d > 1000000 ? '#238b45' :
+        d > 500000 ? '#41ab5d' :
+          d > 250000 ? '#74c476' :
+            d > 100000 ? '#a1d99b' :
+              d > 25000 ? '#c7e9c0' :
+                d > 10000 ? '#e5f5e0' :
+                  '#f7fcf5';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.WineProduction),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Wine Production (gal/year): " +
+      feature.properties.WineProduction).on({
+      });
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsWine;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<strong>Wine Production</strong><br/>in Gallons" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\"> " + limits[index] + "</li>");
     });
 
     // add background colors to legend. 
@@ -1065,7 +1137,7 @@ async function getVaxData2() {
   legend.addTo(myMap2);
 };
 
-async function getWineData() {
+async function getWineData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 3000000 ? '#005a32' :
@@ -1081,7 +1153,7 @@ async function getWineData() {
   // define style elements for map pop ups
   function style(feature) {
     return {
-      fillColor: getColor(feature.properties.GDP),
+      fillColor: getColor(feature.properties.WineProduction),
       weight: 1,
       opacity: 1,
       color: 'black',
@@ -1090,25 +1162,25 @@ async function getWineData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): $" +
-      feature.properties.GDP).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Wine Production (gal/year): " +
+      feature.properties.WineProduction).on({
       });
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
-  ).addTo(myMap);
+  ).addTo(myMap2);
 
   // Set up the legend.
   var legend = L.control({ position: "bottomright" });
   legend.onAdd = function () {
     var div = L.DomUtil.create("div", "info legend");
-    var limits = geojson.options.limitsGDP;
+    var limits = geojson.options.limitsWine;
     var colors = geojson.options.colors;
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<strong>State GDP</strong><br/>In Thousands<br/>of US Dollars" +
+    var legendInfo = "<strong>Wine Production</strong><br/>in Gallons" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -1117,7 +1189,7 @@ async function getWineData() {
 
     // define legend HTML by passing colors. 
     limits.forEach(function (limit, index) {
-      labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\">$ " + limits[index] + "</li>");
+      labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\"> " + limits[index] + "</li>");
     });
 
     // add background colors to legend. 
@@ -1126,5 +1198,5 @@ async function getWineData() {
   };
 
   // Adding the legend to the map
-  legend.addTo(myMap);
+  legend.addTo(myMap2);
 };
