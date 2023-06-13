@@ -22,7 +22,7 @@ To run the program, launch the Flask API using Python and open the Index file in
 
 Users can use the **mapping tool** by selecting a dataset from the dropdown menu and generating the choropleth map. Color gradients show the relative data between states, and clicking on individual states will display a popup that includes the specific numbers for that state. Two maps can be displayed side by side for quick comparisons between various metrics.
 
-![Map sample final](https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/17ab9879-402e-4926-b4cd-d15d10212535)
+![Map sample final](https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/6021685e-aa1e-44cd-8010-b45976de60ec)
 
 Users can use the **table tool** by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states, along with data for the country as a whole.
 
