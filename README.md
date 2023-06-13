@@ -24,6 +24,7 @@ Users can use the **mapping tool** by selecting a dataset from the dropdown menu
 
 <img width="898" alt="Map sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/c71341db-5e2e-4f75-8f06-9580380e2950">
 
+
 Users can use the **table tool** by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states, along with data for the country as a whole.
 
 <img width="534" alt="Table sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/f3a96481-03c1-4853-b2f8-9c9069c558ed">
