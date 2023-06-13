@@ -192,7 +192,7 @@ async function getData() {
   //GDP Data
   for (var i = 0; i < combinedData.length; i++) {
     for (var j = 0; j < dataGDP.length; j++) {
-      if (combinedData[i].properties.name == dataGDP[j].State.replace("_", " ")) {
+      if (combinedData[i].properties.name == dataGDP[j].State) {
         combinedData[i].properties.GDP = dataGDP[j].GDP;
       }
     };
@@ -430,7 +430,7 @@ async function getDensityData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<strong>Population<br/> Density</strong><br/>in # of people <br/>per square mile" +
+    var legendInfo = "<strong>Population<br/> Density</strong><br/>in people <br/>per square mile" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -641,7 +641,7 @@ async function getVoteECData() {
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
     layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + feature.properties.ElectoralWinner + 
-    "'s Nominee receieved <br/>the Electoral College votes. ");
+    "nominee received <br/>the Electoral College votes. ");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -720,7 +720,7 @@ async function getWhiteData() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<strong>Percent of <br/>White Population</strong><br/>" +
+    var legendInfo = "<strong>Percent of Population <br/>Identifying as White</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -911,9 +911,9 @@ async function getGDPData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<strong>Population<br/> Density</strong><br/>in # of people <br/>per square mile" +
-      "<div class=\"labels\">" +
-      "</div>";
+    var legendInfo = "<strong>State GDP</strong><br/>In Thousands<br/>of US Dollars" +
+    "<div class=\"labels\">" +
+    "</div>";
 
     // Add legend to map HTML. 
     div.innerHTML = legendInfo;
@@ -975,7 +975,7 @@ async function getDensityData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<strong>Population<br/> Density</strong><br/>in # of people <br/>per square mile" +
+    var legendInfo = "<strong>Population<br/> Density</strong><br/>in people <br/>per square mile" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -1204,7 +1204,7 @@ async function getWhiteData2() {
     var labels = [];
 
     // Add the legend title and units.
-    var legendInfo = "<strong>Percent of <br/>White Population</strong><br/>" +
+    var legendInfo = "<strong>Percent of Population <br/>Identifying as White</strong><br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -1440,7 +1440,7 @@ async function getVoteECData2() {
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
     layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + feature.properties.ElectoralWinner + 
-    "'s Nominee receieved <br/>the Electoral College votes. ");
+    "nominee received <br/>the Electoral College votes. ");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
