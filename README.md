@@ -17,16 +17,6 @@ The ultimate goal is to allow users to make their own assumptions about a state�
 
 Tools used to create this project include a Python Flask API, HTML/CSS, SQLite, and JavaScript (including the Leaflet and Bootstrap libraries).
 
-### Datasets
-The authors considered a wide variety of data to include in this tool. While there is a future opportunity to add additional data, the datasets that are included in the first iteration of this tool are: GDP, population density, total population, voting trends (2020 presidential election), percentage of population identifying as white,  vaccination rates, and wine production (this one's just for fun). 
-
-Data was ethically sourced from the following locations:
-* GDP, Total Population, and Whiteness: [2020 US Decennial Census](https://www.census.gov/data/developers/data-sets/decennial-census.html)
-* Density: [US States Data from Leaflet.js](https://leafletjs.com/examples/choropleth/us-states.js)
-* Voting Trends: 2020 presidential election results from [MIT Election Data and Science Lab "U.S. President 1976–2020" from Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX)
-* Vaccination Rate: [State-by-state data on COVID-19 vaccinations in the United States from Our World in Data](https://ourworldindata.org/us-states-vaccinations)
-* Wine Production: [Wine Production by State from World Population Review](https://worldpopulationreview.com/state-rankings/wine-production-by-state)
-
 ### How it works
 To run the program, launch the Flask API using Python and open the Index file in your browser.
 
@@ -37,6 +27,16 @@ Users can use the **mapping tool** by selecting a dataset from the dropdown menu
 Users can use the **table tool** by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states, along with data for the country as a whole.
 
 <img width="535" alt="Table sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/f6035399-2e48-4d19-b8a6-6452ccf7fd3e">
+
+### Datasets
+The authors considered a wide variety of data to include in this tool. While there is a future opportunity to add additional data, the datasets that are included in the first iteration of this tool are: GDP, population density, total population, voting trends (2020 presidential election), percentage of population identifying as white,  vaccination rates, and wine production (this one's just for fun). 
+
+Data was ethically sourced from the following locations:
+* GDP, Total Population, and Whiteness: [2020 US Decennial Census](https://www.census.gov/data/developers/data-sets/decennial-census.html)
+* Density: [US States Data from Leaflet.js](https://leafletjs.com/examples/choropleth/us-states.js)
+* Voting Trends: 2020 presidential election results from [MIT Election Data and Science Lab "U.S. President 1976–2020" from Harvard Dataverse](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/42MVDX)
+* Vaccination Rate: [State-by-state data on COVID-19 vaccinations in the United States from Our World in Data](https://ourworldindata.org/us-states-vaccinations)
+* Wine Production: [Wine Production by State from World Population Review](https://worldpopulationreview.com/state-rankings/wine-production-by-state)
 
 ### Future opportunities
 There are several opportunities to build upon this project further:
