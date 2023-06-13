@@ -26,7 +26,7 @@ Users can use the **mapping tool** by selecting a dataset from the dropdown menu
 
 Users can use the **table tool** by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states, along with data for the country as a whole.
 
-<img width="535" alt="Table sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/f6035399-2e48-4d19-b8a6-6452ccf7fd3e">
+<img width="534" alt="Table sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/f3a96481-03c1-4853-b2f8-9c9069c558ed">
 
 ### Datasets
 The authors considered a wide variety of data to include in this tool. While there is a future opportunity to add additional data, the datasets that are included in the first iteration of this tool are: GDP, population density, total population, voting trends (2020 presidential election), percentage of population identifying as white,  vaccination rates, and wine production (this one's just for fun). 
