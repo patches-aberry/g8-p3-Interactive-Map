@@ -84,11 +84,14 @@ var geojson = {
     colorsVoting1: ['#99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
     colorsVoting2: ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'],
     colorsWine: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
+    colorsVoteEC: ['#FF0000', '#0000FF'],
     limitsDensity: [1000, 500, 200, 50, 20, 10, 1],
     limitsPopulation: [35000000, 10000000, 5000000, 2500000, 1000000, 750000, 500000],
     limitsVoting: [.65, .60, .59, .57, .55, .52, .49],
     limitsWhite: [.85, .75, .65, .55, .50, .45],
-    limitsWine: [100000000, 20000000, 10000000, 2000000, 1000000, 500000, 100000]
+    limitsWine: [100000000, 20000000, 10000000, 2000000, 1000000, 500000, 100000],
+    limitsGDPpc: [100000, 90000, 80000, 70000, 60000, 50000, 40000],
+    limitsVoteEC: ["Republican", "Democrat"]
   }
 }
 
@@ -118,6 +121,12 @@ function funcSelectMap1(SelectID) {
   else if (SelectID === "WineProd") {
     getWineData();
   }
+  else if (SelectID === "GDPpc") {
+    getGDPpcData();
+  }
+  else if (SelectID === "VotingEC") {
+    getVoteECData();
+  }
 }
 
 function funcSelectMap2(SelectID2) {
@@ -142,6 +151,12 @@ function funcSelectMap2(SelectID2) {
   else if (SelectID2 === "WineProd") {
     getWineData2();
   }
+  else if (SelectID2 === "GDPpc") {
+    getGDPpcData2();
+  }
+  else if (SelectID2 === "VotingEC") {
+    getVoteECData2();
+  }
 }
 
 function optionChanged() {
@@ -160,6 +175,7 @@ async function getData() {
   var responseVax = await fetch(api_url + "/api/v1.0/vaccination");
   var responseVote = await fetch(api_url + "/api/v1.0/voting_popular");
   var responseWine = await fetch(api_url + "/api/v1.0/wine")
+  var responseVoteEC = await fetch(api_url + "/api/v1.0/voting_electoral")
 
   // Parsing it to JSON format
   var dataPop = await responsePop.json();
@@ -168,6 +184,7 @@ async function getData() {
   var dataVax = await responseVax.json()
   var dataVote = await responseVote.json()
   var dataWine = await responseWine.json()
+  var dataVoteEC = await responseVoteEC.json()
 
   //Combining data sets by matching on state values. 
   let combinedData = geoData.slice(0);
@@ -227,6 +244,15 @@ async function getData() {
     };
   };
 
+  //Electoral College Data
+  for (var i = 0; i < combinedData.length; i++) {
+    for (var j = 0; j < dataVoteEC.length; j++) {
+      if (combinedData[i].properties.name == dataVoteEC[j].State) {
+        combinedData[i].properties.ElectoralWinner = dataVoteEC[j].ElectoralWinner;
+      }
+    };
+  };
+
   // Format data to match expected incoming data
   let mapData = { "type": "FeatureCollection", "features": combinedData };
   return mapData;
@@ -277,6 +303,70 @@ async function getGDPData() {
 
     // Add the legend title and units.
     var legendInfo = "<strong>State GDP</strong><br/>In Thousands<br/>of US Dollars" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\">$ " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap);
+};
+
+async function getGDPpcData() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 100000 ? '#005a32' :
+      d > 90000 ? '#238b45' :
+        d > 80000 ? '#41ab5d' :
+          d > 70000 ? '#74c476' :
+            d > 60000 ? '#a1d99b' :
+              d > 50000 ? '#c7e9c0' :
+                d > 40000 ? '#e5f5e0' :
+                  '#f7fcf5';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.GDP * 1000000 / feature.properties.TotalPopulation),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP per Capita: $" +
+      Math.round(feature.properties.GDP * 1000000 / feature.properties.TotalPopulation)).on({
+      });
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsGDPpc;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<strong>State GDP</strong><br/> per Capita<br/>" +
       "<div class=\"labels\">" +
       "</div>";
 
@@ -527,6 +617,67 @@ async function getVotingData() {
   legend2.addTo(myMap);
 };
 
+async function getVoteECData() {
+  // Color function for scaling on Map and Legend. 
+  function getColorVote(winner) {
+    if (winner === "Republican") {
+      return '#FF0000';
+    }
+    else if (winner === "Democrat") {
+      return '#0000FF'
+    }
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColorVote(feature.properties.ElectoralWinner),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + feature.properties.ElectoralWinner + 
+    "'s Nominee receieved <br/>the Electoral College votes. ");
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsVoteEC;
+    var colors = geojson.options.colorsVoteEC;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<Strong>Electoral Winner</strong><br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap);
+};
+
 async function getWhiteData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
@@ -656,13 +807,13 @@ async function getVaxData() {
 async function getWineData() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 3000000 ? '#005a32' :
-      d > 1000000 ? '#238b45' :
-        d > 500000 ? '#41ab5d' :
-          d > 250000 ? '#74c476' :
-            d > 100000 ? '#a1d99b' :
-              d > 25000 ? '#c7e9c0' :
-                d > 10000 ? '#e5f5e0' :
+    return d > 100000000 ? '#005a32' :
+      d > 20000000 ? '#238b45' :
+        d > 10000000 ? '#41ab5d' :
+          d > 2000000 ? '#74c476' :
+            d > 1000000 ? '#a1d99b' :
+              d > 500000 ? '#c7e9c0' :
+                d > 100000 ? '#e5f5e0' :
                   '#f7fcf5';
   }
 
@@ -1140,13 +1291,13 @@ async function getVaxData2() {
 async function getWineData2() {
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
-    return d > 3000000 ? '#005a32' :
-      d > 1000000 ? '#238b45' :
-        d > 500000 ? '#41ab5d' :
-          d > 250000 ? '#74c476' :
-            d > 100000 ? '#a1d99b' :
-              d > 25000 ? '#c7e9c0' :
-                d > 10000 ? '#e5f5e0' :
+    return d > 100000000 ? '#005a32' :
+      d > 20000000 ? '#238b45' :
+        d > 10000000 ? '#41ab5d' :
+          d > 2000000 ? '#74c476' :
+            d > 1000000 ? '#a1d99b' :
+              d > 500000 ? '#c7e9c0' :
+                d > 100000 ? '#e5f5e0' :
                   '#f7fcf5';
   }
 
@@ -1190,6 +1341,131 @@ async function getWineData2() {
     // define legend HTML by passing colors. 
     limits.forEach(function (limit, index) {
       labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\"> " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getGDPpcData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColor(d) {
+    return d > 100000 ? '#005a32' :
+      d > 90000 ? '#238b45' :
+        d > 80000 ? '#41ab5d' :
+          d > 70000 ? '#74c476' :
+            d > 60000 ? '#a1d99b' :
+              d > 50000 ? '#c7e9c0' :
+                d > 40000 ? '#e5f5e0' :
+                  '#f7fcf5';
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColor(feature.properties.GDP * 1000000 / feature.properties.TotalPopulation),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP per Capita: $" +
+      Math.round(feature.properties.GDP * 1000000 / feature.properties.TotalPopulation)).on({
+      });
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsGDPpc;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<strong>State GDP</strong><br/> per Capita<br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\" class=\"map-legend\">$ " + limits[index] + "</li>");
+    });
+
+    // add background colors to legend. 
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding the legend to the map
+  legend.addTo(myMap2);
+};
+
+async function getVoteECData2() {
+  // Color function for scaling on Map and Legend. 
+  function getColorVote(winner) {
+    if (winner === "Republican") {
+      return '#FF0000';
+    }
+    else if (winner === "Democrat") {
+      return '#0000FF'
+    }
+  }
+
+  // define style elements for map pop ups
+  function style(feature) {
+    return {
+      fillColor: getColorVote(feature.properties.ElectoralWinner),
+      weight: 1,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 0.7
+    };
+  }
+  // define text and values for pop ups. 
+  function onEachFeature(feature, layer) {
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + feature.properties.ElectoralWinner + 
+    "'s Nominee receieved <br/>the Electoral College votes. ");
+  }
+  //add pop ups to map with color and styling from above. 
+  L.geoJson(await getData(),
+    { style: style, onEachFeature: onEachFeature },
+  ).addTo(myMap2);
+
+  // Set up the legend.
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limitsVoteEC;
+    var colors = geojson.options.colorsVoteEC;
+    var labels = [];
+
+    // Add the legend title and units.
+    var legendInfo = "<Strong>Electoral Winner</strong><br/>" +
+      "<div class=\"labels\">" +
+      "</div>";
+
+    // Add legend to map HTML. 
+    div.innerHTML = legendInfo;
+
+    // define legend HTML by passing colors. 
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"> " + limits[index] + "</li>");
     });
 
     // add background colors to legend. 
