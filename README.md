@@ -22,12 +22,11 @@ To run the program, launch the Flask API using Python and open the Index file in
 
 Users can use the **mapping tool** by selecting a dataset from the dropdown menu and generating the choropleth map. Color gradients show the relative data between states, and clicking on individual states will display a popup that includes the specific numbers for that state. Two maps can be displayed side by side for quick comparisons between various metrics.
 
-<img width="898" alt="Map sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/c71341db-5e2e-4f75-8f06-9580380e2950">
-
+![Map sample final](https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/17ab9879-402e-4926-b4cd-d15d10212535)
 
 Users can use the **table tool** by selecting two different states to compare from the dropdown menus. The table will display data from each metric in a side-by-side comparison for the two selected states, along with data for the country as a whole.
 
-<img width="534" alt="Table sample" src="https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/f3a96481-03c1-4853-b2f8-9c9069c558ed">
+![Table sample final](https://github.com/patches-aberry/g8-p3-Interactive-Map/assets/121266277/00b2d90a-4035-4a97-9f71-bb0fcbb23f6a)
 
 ### Datasets
 The authors considered a wide variety of data to include in this tool. While there is a future opportunity to add additional data, the datasets that are included in the first iteration of this tool are: GDP, population density, total population, voting trends (2020 presidential election), percentage of population identifying as white,  vaccination rates, and wine production (this one's just for fun). 
