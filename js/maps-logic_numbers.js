@@ -79,18 +79,18 @@ var geoData =
   ]
 var geojson = {
   options: {
-    limitsGDP: ['3,000,000', '1,000,000', '500,000', '250,000', '100,000', '25,000', '10,000'],
+    limitsGDP: [3000000, 1000000, 500000, 250000, 100000, 25000, 10000],
     colors: ['#005a32', '#238b45', '#41ab5d', '#74c476', '#a1d99b', '#c7e9c0', '#e5f5e0', '#f7fcf5'],
     colorsVoting1: ['#99000d', '#cb181d', '#ef3b2c', '#fb6a4a', '#fc9272', '#fcbba1', '#fee0d2', '#fff5f0'],
     colorsVoting2: ['#084594', '#2171b5', '#4292c6', '#6baed6', '#9ecae1', '#c6dbef', '#deebf7', '#f7fbff'],
     colorsWine: ['#4a1486', '#6a51a3', '#807dba', '#9e9ac8', '#bcbddc', '#dadaeb', '#efedf5', '#fcfbfd'],
     colorsVoteEC: ['#FF0000', '#0000FF'],
     limitsDensity: [1000, 500, 200, 50, 20, 10, 1],
-    limitsPopulation: ['35,000,000', '10,000,000', '5,000,000', '2,500,000', '1,000,000', '750,000', '500,000'],
-    limitsVoting: ['65%', '60%', '59%', '57%', '55%', '52%', '49%'],
-    limitsWhite: ['85%', '75%', '65%', '55%', '50%', '45%'],
-    limitsWine: ['100,000,000', '20,000,000', '10,000,000', '2,000,000', '1,000,000', '500,000', '100,000'],
-    limitsGDPpc: ['100,000', '90,000', '80,000', '70,000', '60,000', '50,000', '40,000'],
+    limitsPopulation: [35000000, 10000000, 5000000, 2500000, 1000000, 750000, 500000],
+    limitsVoting: [.65, .60, .59, .57, .55, .52, .49],
+    limitsWhite: [.85, .75, .65, .55, .50, .45],
+    limitsWine: [100000000, 20000000, 10000000, 2000000, 1000000, 500000, 100000],
+    limitsGDPpc: [100000, 90000, 80000, 70000, 60000, 50000, 40000],
     limitsVoteEC: ["Republican", "Democrat"]
   }
 }
@@ -197,6 +197,13 @@ async function getData() {
       }
     };
   };
+// console.log(combinedData)
+//   let GDPValues = []
+//   for (let i = 0; i < combinedData.length-1; i++) {
+//     GDPValues.push(combinedData[i].properties.GDP.toLocaleString('en-US', { style: 'currency', currency: 'USD' }));
+//   }
+// console.log('GDP Values',GDPValues)
+
 
   //Population Data
   for (var i = 0; i < combinedData.length; i++) {
@@ -255,11 +262,14 @@ async function getData() {
 
   // Format data to match expected incoming data
   let mapData = { "type": "FeatureCollection", "features": combinedData };
-  return mapData;
-
+  // console.log(combinedData[0].properties.GDP.toFixed(2))
+  // console.log(combinedData[0].properties.GDP.toLocaleString('en-US'))
+  // console.log(mapData.features[0].properties.GDP.toLocaleString('en-US', { style: 'currency', currency: 'USD' }))
+  return mapData;//, GDPValues;  
 }
 
 async function getGDPData() {
+
   // Color function for scaling on Map and Legend. 
   function getColor(d) {
     return d > 3000000 ? '#005a32' :
@@ -289,13 +299,18 @@ async function getGDPData() {
     else {
       var popupContent = 0;
     }
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): " +
-      popupContent).on({
+    // console.log(popupContent);
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): $" +
+    popupContent).on({  
+    // feature.properties.GDP).on({//}).toLocaleString('en-US', { style: 'currency', currency: 'USD' })).on({
+      // "1,000,000").on({
       });
   }
+  
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
     { style: style, onEachFeature: onEachFeature },
+    // console.log(GDPValues)
   ).addTo(myMap);
 
   // Set up the legend.
@@ -353,13 +368,8 @@ async function getGDPpcData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.GDP > 0) {
-      var popupContent = (feature.properties.GDP*1000000 / feature.properties.TotalPopulation).toLocaleString('en-US', { style: 'currency', currency: 'USD' });}
-      else {
-        var popupContent = 0;
-      }
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP per Capita: " +
-      popupContent).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP per Capita: $" +
+      Math.round(feature.properties.GDP * 1000000 / feature.properties.TotalPopulation)).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -486,13 +496,8 @@ async function getTotalPopData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.TotalPopulation > 0) {
-      var popupContent = feature.properties.TotalPopulation.toLocaleString('en-US');}
-      else {
-        var popupContent = 0;
-      }
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Total Population: " +
-      popupContent);
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Total Population: " +
+      feature.properties.TotalPopulation);
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -656,7 +661,7 @@ async function getVoteECData() {
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
     layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + feature.properties.ElectoralWinner + 
-    " nominee received <br/>the Electoral College votes. ");
+    "nominee received <br/>the Electoral College votes. ");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -844,13 +849,8 @@ async function getWineData() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.WineProduction > 0) {
-      var popupContent = feature.properties.WineProduction.toLocaleString('en-US');}
-      else {
-        var popupContent = 0;
-      }
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Wine Production (gal/year): " +
-      popupContent).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Wine Production (gal/year): " +
+      feature.properties.WineProduction).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -913,13 +913,8 @@ async function getGDPData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.GDP > 0) {
-    var popupContent = feature.properties.GDP.toLocaleString('en-US', { style: 'currency', currency: 'USD' });}
-    else {
-      var popupContent = 0;
-    }
-    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): " +
-      popupContent).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP (in thousands of USD): $" +
+      feature.properties.GDP).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -1046,13 +1041,8 @@ async function getTotalPopData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.TotalPopulation > 0) {
-      var popupContent = feature.properties.TotalPopulation.toLocaleString('en-US');}
-      else {
-        var popupContent = 0;
-      }
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Total Population: " +
-      popupContent);
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Total Population: " +
+      feature.properties.TotalPopulation);
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
@@ -1343,13 +1333,8 @@ async function getWineData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.WineProduction > 0) {
-      var popupContent = feature.properties.WineProduction.toLocaleString('en-US');}
-      else {
-        var popupContent = 0;
-      }
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Wine Production (gal/year): " +
-      popupContent).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />Wine Production (gal/year): " +
+      feature.properties.WineProduction).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -1412,13 +1397,8 @@ async function getGDPpcData2() {
   }
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
-    if (feature.properties.GDP > 0) {
-      var popupContent = (feature.properties.GDP*1000000 / feature.properties.TotalPopulation).toLocaleString('en-US', { style: 'currency', currency: 'USD' });}
-      else {
-        var popupContent = 0;
-      }
-      layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP per Capita: " +
-      popupContent).on({
+    layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />GDP per Capita: $" +
+      Math.round(feature.properties.GDP * 1000000 / feature.properties.TotalPopulation)).on({
       });
   }
   //add pop ups to map with color and styling from above. 
@@ -1480,7 +1460,7 @@ async function getVoteECData2() {
   // define text and values for pop ups. 
   function onEachFeature(feature, layer) {
     layer.bindPopup("<strong>" + feature.properties.name + "</strong><br />" + feature.properties.ElectoralWinner + 
-    " nominee received <br/>the Electoral College votes. ");
+    "nominee received <br/>the Electoral College votes. ");
   }
   //add pop ups to map with color and styling from above. 
   L.geoJson(await getData(),
