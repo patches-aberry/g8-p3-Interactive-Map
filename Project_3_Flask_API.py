@@ -36,6 +36,7 @@ Poverty = Base.classes.poverty_rate_by_state_2023
 GDP = Base.classes.sagdp1__all_areas_1997_2022
 Vaccination = Base.classes.us_state_vaccinations
 Voting = Base.classes.cleaned_voting
+Wine = Base.classes.wine_production_by_state
 
 
 # In[3]:
@@ -63,6 +64,7 @@ def welcome():
         f"/api/v1.0/population<br/>"
         f"/api/v1.0/whiteness<br/>"
         f"/api/v1.0/vaccination<br/>"
+        f"/api/v1.0/wine<br/>"
     )
 
 
@@ -213,6 +215,26 @@ def vaccination():
         state_vaccination_dict['VaccinationRate'] = results[x][1]
         vaccination_stats.append(state_vaccination_dict)
     return jsonify(vaccination_stats)
+
+
+# Route for wine production data
+@app.route("/api/v1.0/wine")
+def wine():
+    # Create our session (link) from Python to the DB
+    session = Session(engine)
+
+    # Query all data
+    results = session.query(Wine.state, Wine.wineProduction).all()
+    session.close()             
+
+    # Loop through data to create list of dictionaries and JSONify
+    wine_stats = []
+    for State, WineProduction in results:
+        state_wine_dict = {}
+        state_wine_dict['State'] = State
+        state_wine_dict['WineProduction'] = WineProduction
+        wine_stats.append(state_wine_dict)
+    return jsonify(wine_stats)
 
 
 if __name__ == '__main__':
